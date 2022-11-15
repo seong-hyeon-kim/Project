@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.shopping.musinsa.PaymentMapper">
+
+	<resultMap type="PaymentVO" id="paymentMap">
+		<id column="PAYMENT_NUMBER" property="paymentNumber" />
+		<result column="USER_ID" property="userId" />
+		<result column="PRODUCT_NUMBER" property="productNumber" />
+		<result column="PAYMENT_PRICE" property="paymentPrice" />
+		<result column="PAYMENT_AMOUNT" property="paymentAmount" />
+		<result column="PAYMENT_DATE_CREATED" property="paymentDateCreated" />
+		<result column="PAYMENT_PRODUCT_SIZE" property="paymentProductSize" />
+		
+		<association javaType="ProductVO" property="productVO">
+			<id column="PRODUCT_NUMBER" property="productNumber" />
+			<result column="PRODUCT_NAME" property="productName" />
+			<result column="PRODUCT_PRICE" property="productPrice" />
+			<result column="PRODUCT_INFORMATION" property="productInformation" />
+			<result column="PRODUCT_SIZE" property="productSize" />
+			<result column="PRODUCT_IMG" property="productImg" />
+			<result column="PRODUCT_GOOD" property="productGood" />
+			<result column="PRODUCT_GRADE" property="productGrade" />
+			<result column="PRODUCT_DATE_REGISTER" property="productDateRegister" />
+			<result column="PRODUCT_CATEGORY" property="productCategory" />
+		</association>
+	</resultMap>
+	
+	<select id="select_by_user_id" parameterType="java.util.ArrayList" resultMap="paymentMap" >
+		select PAY.PAYMENT_NUMBER, PAY.USER_ID, PAY.PRODUCT_NUMBER, PAY.PAYMENT_PRICE, PAY.PAYMENT_AMOUNT, PAY.PAYMENT_DATE_CREATED, PAY.PAYMENT_PRODUCT_SIZE,
+				P.PRODUCT_NUMBER, P.PRODUCT_NAME, P.PRODUCT_PRICE, P.PRODUCT_INFORMATION, P.PRODUCT_SIZE, P.PRODUCT_IMG, P.PRODUCT_GOOD, P.PRODUCT_GRADE, P.PRODUCT_DATE_REGISTER, P.PRODUCT_CATEGORY
+		FROM PAYMENT PAY, PRODUCT P
+		WHERE PAY.PRODUCT_NUMBER = P.PRODUCT_NUMBER
+		AND USER_ID = #{userId} ORDER BY PAY.PAYMENT_NUMBER DESC
+	</select>
+
+	<insert id="insert">
+		insert into ${payment}
+		(${paymentNumber}, ${userId}, ${productNumber}, ${paymentPrice}, ${paymentAmount}, ${paymentProductSize})
+		values (#{paymentNumber}, #{userId}, #{productNumber}, #{paymentPrice}, #{paymentAmount}, #{paymentProductSize})
+	</insert>
+
+</mapper>

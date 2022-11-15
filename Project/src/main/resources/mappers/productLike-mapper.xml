@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.shopping.musinsa.ProductLikeMapper">
+
+	<resultMap type="ProductLikeVO" id="likeMap">
+		<id column="LIKE_NUMBER" property="likeNumber" />
+		<result column="USER_ID" property="userId"/>
+		<result column="PRODUCT_NUMBER" property="productNumber"/>
+		
+		<association javaType="ProductVO" property="productVO">
+			<id column="PRODUCT_NUMBER" property="productNumber" />
+			<result column="PRODUCT_NAME" property="productName" />
+			<result column="PRODUCT_PRICE" property="productPrice" />
+			<result column="PRODUCT_INFORMATION" property="productInformation" />
+			<result column="PRODUCT_SIZE" property="productSize" />
+			<result column="PRODUCT_IMG" property="productImg" />
+			<result column="PRODUCT_GOOD" property="productGood" />
+			<result column="PRODUCT_GRADE" property="productGrade" />
+			<result column="PRODUCT_DATE_REGISTER" property="productDateRegister" />
+			<result column="PRODUCT_CATEGORY" property="productCategory" />
+		</association>
+		
+	</resultMap>
+<!-- ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ -->
+	<select id="select" parameterType="java.util.ArrayList" resultMap="likeMap">
+		SELECT L.LIKE_NUMBER, L.USER_ID, L.PRODUCT_NUMBER,
+		P.PRODUCT_NUMBER, P.PRODUCT_NAME, P.PRODUCT_PRICE, P.PRODUCT_INFORMATION, P.PRODUCT_SIZE, P.PRODUCT_IMG, P.PRODUCT_GOOD, P.PRODUCT_GRADE, P.PRODUCT_DATE_REGISTER, P.PRODUCT_CATEGORY
+		FROM PRODUCT_LIKE L, PRODUCT P
+		WHERE L.PRODUCT_NUMBER = P.PRODUCT_NUMBER
+		AND USER_ID = #{userId} ORDER BY L.LIKE_NUMBER DESC
+	</select>
+	
+	<insert id="insert">
+		insert into ${productLike}
+		(${likeNumber}, ${userId}, ${productNumber})
+		values (#{likeNumber}, #{userId}, #{productNumber})
+	</insert>
+
+	<!--  -->
+	<select id="select_by_product_number" resultType="ProductVO">
+		select * from ${product} where ${productNumber} = #{productNumber}
+	</select>
+	
+	<!-- 좋아요 여부 불러오기 -->
+	<select id="findLike" resultType="int">
+		select count(*) from ${productLike}
+		where ${productNumber} = #{productNumber} and ${userId} = #{userId}
+	</select>
+	
+	<delete id="delete">
+		delete from ${productLike} where ${productNumber} = #{productNumber} and ${userId} = #{userId}
+	</delete>
+	
+</mapper>

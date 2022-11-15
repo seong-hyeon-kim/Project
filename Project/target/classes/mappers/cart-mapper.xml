@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.shopping.musinsa.CartMapper">
+
+	<resultMap type="CartVO" id="cartMap">
+		<id column="CART_NUMBER" property="cartNumber" />
+		<result column="USER_ID" property="userId" />
+		<result column="PRODUCT_NUMBER" property="productNumber" />
+		<result column="CART_AMOUNT" property="cartAmount" />
+		<result column="CART_SIZE" property="cartSize" />
+		
+		<association javaType="ProductVO" property="productVO">
+			<id column="PRODUCT_NUMBER" property="productNumber" />
+			<result column="PRODUCT_NAME" property="productName" />
+			<result column="PRODUCT_PRICE" property="productPrice" />
+			<result column="PRODUCT_INFORMATION" property="productInformation" />
+			<result column="PRODUCT_SIZE" property="productSize" />
+			<result column="PRODUCT_IMG" property="productImg" />
+			<result column="PRODUCT_GOOD" property="productGood" />
+			<result column="PRODUCT_GRADE" property="productGrade" />
+			<result column="PRODUCT_DATE_REGISTER" property="productDateRegister" />
+			<result column="PRODUCT_CATEGORY" property="productCategory" />
+		</association>
+	</resultMap>
+
+	<select id="select_by_user_id" parameterType="java.util.ArrayList" resultMap="cartMap" >
+		select C.CART_NUMBER, C.USER_ID, C.PRODUCT_NUMBER, C.CART_AMOUNT, C.CART_SIZE,
+				P.PRODUCT_NUMBER, P.PRODUCT_NAME, P.PRODUCT_PRICE, P.PRODUCT_INFORMATION, P.PRODUCT_SIZE, P.PRODUCT_IMG, P.PRODUCT_GOOD, P.PRODUCT_GRADE, P.PRODUCT_DATE_REGISTER, P.PRODUCT_CATEGORY
+		FROM CART C, PRODUCT P
+		WHERE C.PRODUCT_NUMBER = P.PRODUCT_NUMBER
+		AND USER_ID = #{userId} ORDER BY C.CART_NUMBER DESC
+	</select>
+
+	<insert id="insert">
+		insert into ${cart}
+		(${cartNumber}, ${userId}, ${productNumber}, ${cartAmount}, ${cartSize})
+		values (#{cartNumber}, #{userId}, #{productNumber}, #{cartAmount}, #{cartSize})
+	</insert>
+	
+	<update id="update">
+		update ${cart}
+		set ${cartAmount} = #{cartAmount}, ${cartSize} = #{cartSize}
+		where ${cartNumber} = #{cartNumber}
+	</update>
+	
+	<delete id="delete">
+		delete from ${cart}
+		where ${cartNumber} = #{cartNumber}
+	</delete>
+	
+	<select id="select_userId_from_cart" resultType="String">
+		select ${productNumber} from ${cart} where ${userId} = #{userId}
+	</select>
+
+	
+</mapper>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration
+PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+<!-- DB 테이블과 컬럼들을 mapper 매핑을 위한 변수 선언-->
+	<properties>
+		<!-- 
+		* property
+		- name : mapper.xml에서 사용될 이름
+		- value : DB 테이블 및 컬럼 이름
+		
+		
+		 -->
+		
+		 <property name="product" value="product"/> 
+		 <property name="productNumber" value="product_number"/>
+		 <property name="productName" value="product_name"/>
+		 <property name="productPrice" value="product_price"/>
+		 <property name="productInformation" value="product_information"/>
+		 <property name="productSize" value="product_size"/>
+		 <property name="productImg" value="product_img"/>
+		 <property name="productGood" value="product_good"/>
+		 <property name="productGrade" value="product_grade"/>
+		 <property name="productDateRegister" value="product_date_register"/>
+		 <property name="productCategory" value="product_category"/>
+		 
+		 <property name="productLike" value="product_like"/> 
+		 <property name="likeNumber" value="like_number"/> 
+		 <property name="userId" value="user_id"/> 
+		 
+		 <property name="cart" value="cart"/>
+		 <property name="cartNumber" value="cart_number"/>
+		 <property name="cartAmount" value="cart_amount"/>
+		 <property name="cartSize" value="cart_size"/>
+		 
+		 <property name="payment" value="payment"/>
+		 <property name="paymentNumber" value="payment_number"/>
+		 <property name="paymentPrice" value="payment_price"/>
+		 <property name="paymentAmount" value="payment_amount"/>
+		 <property name="paymentDateCreated" value="payment_date_created"/>
+		 <property name="paymentProductSize" value="payment_product_size"/>
+
+
+		 
+		 <!-- HO -->
+		<property name="product_question" value="product_question"/>
+		<property name="productQuestionNumber" value="product_question_number"/>
+		<property name="userId" value="user_id"/>
+		<property name="productQuestionWhether" value="product_question_whether"/>
+		<property name="productQuestionType" value="product_question_type"/>
+		<property name="productQuestionContent" value="product_question_content"/>
+		<property name="productQuestionDateCreated" value="product_question_date_created"/>
+		<property name="productQuestionTitle" value="product_question_title"/>
+		  
+		 <!-- HO -->
+		 
+		
+		 
+	<!-- value = DB명 , name = 자바에서 쓸 이름 -->
+	</properties>
+	
+	<!-- underscore 명명법을 camel 명명법으로 변환이 가능하도록 세팅 -->
+	<settings>
+		<setting name="mapUnderscoreToCamelCase" value="true"/>
+	</settings>
+	
+	<!-- typeAlises : mapper.xml의 select 리턴 타입에 들어갈 클래스 경로를 설정 -->
+	<typeAliases>
+		<package name="project.shopping.musinsa.domain"/>
+	</typeAliases>
+	
+
+
+
+</configuration>
