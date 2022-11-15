@@ -40,6 +40,7 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		 <property name="paymentAmount" value="payment_amount"/>
 		 <property name="paymentDateCreated" value="payment_date_created"/>
 		 <property name="paymentProductSize" value="payment_product_size"/>
+		 <property name="paymentState" value="payment_state"/>
 
 
 		 

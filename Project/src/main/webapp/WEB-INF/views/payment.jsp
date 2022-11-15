@@ -4,6 +4,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <head>
 <meta charset="UTF-8">
 <title>결제 내역</title>
@@ -38,6 +39,7 @@
 				<th>주문 옵션</th>
 				<th>주문 금액</th>
 				<th>주문 일자</th>
+				<th>주문 상황</th>
 				<th></th>
 
 			</tr>
@@ -49,14 +51,15 @@
 						src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productVO.productImg}"
 						width="125px" height="150px"></td>
 					<td>${vo.productVO.productName}</td>
-					<td>${vo.paymentNumber}</td>
+					<td id="paymentNumber">${vo.paymentNumber}</td>
 					<td>${vo.paymentAmount}</td>
 					<td>${vo.paymentProductSize}</td>
 					<td>${vo.paymentPrice}</td>	
 					<fmt:formatDate value="${vo.paymentDateCreated}"
 					pattern="yyyy-MM-dd HH:mm:ss" var="paymentDateCreated"/>
 					<td>${paymentDateCreated}</td>
-					<td><button>결제 취소</button></td>
+					<td>${vo.paymentState}</td>
+					<td id="refund"><button id="btn_refund">결제 취소</button></td>
 
 				</tr>
 				
@@ -65,6 +68,68 @@
 		</tbody>
 		
 	</table>
+	
+	<script type="text/javascript">
+	$(document).ready(function() {
+		
+		$('#table #refund #btn_refund').click(function() {
+			var currentRow = $(this).closest('tr');
+			var paymentState = '결제 취소';
+			var paymentNumber = currentRow.find('td:eq(2)').text();
+			var obj = {
+					'paymentNumber' : paymentNumber,
+					'paymentState' : paymentState
+			};
+			console.log(obj);
+			$.ajax({
+				type : 'PUT',
+				url : 'payment/' + paymentNumber,
+				headers : {
+					'content-type' : 'application/json',
+	                'x-HTTP-Method-Override' : 'POST'
+				},
+				data : JSON.stringify(obj),
+				success : function (result, status) {
+					if(status == 'success') {
+						location.href = 'payment';
+					}
+				}
+				
+			}) // end ajax
+			
+			
+			
+		}); // end btn_refund
+		
+		
+	}); // end document
+	
+	
+	</script>
+	
 
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

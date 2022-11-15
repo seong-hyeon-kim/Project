@@ -200,9 +200,6 @@ li {
 						}) // end delete ajax();
 						
 					} // end for문
-					
-					
-					
 				} else {
 					var msg = '결제에 실패했습니다.';
 				} 

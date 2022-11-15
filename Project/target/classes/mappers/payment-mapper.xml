@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		<result column="PAYMENT_AMOUNT" property="paymentAmount" />
 		<result column="PAYMENT_DATE_CREATED" property="paymentDateCreated" />
 		<result column="PAYMENT_PRODUCT_SIZE" property="paymentProductSize" />
+		<result column="PAYMENT_STATE" property="paymentState" />
 		
 		<association javaType="ProductVO" property="productVO">
 			<id column="PRODUCT_NUMBER" property="productNumber" />
@@ -29,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</resultMap>
 	
 	<select id="select_by_user_id" parameterType="java.util.ArrayList" resultMap="paymentMap" >
-		select PAY.PAYMENT_NUMBER, PAY.USER_ID, PAY.PRODUCT_NUMBER, PAY.PAYMENT_PRICE, PAY.PAYMENT_AMOUNT, PAY.PAYMENT_DATE_CREATED, PAY.PAYMENT_PRODUCT_SIZE,
+		select PAY.PAYMENT_NUMBER, PAY.USER_ID, PAY.PRODUCT_NUMBER, PAY.PAYMENT_PRICE, PAY.PAYMENT_AMOUNT, PAY.PAYMENT_DATE_CREATED, PAY.PAYMENT_PRODUCT_SIZE, PAY.PAYMENT_STATE,
 				P.PRODUCT_NUMBER, P.PRODUCT_NAME, P.PRODUCT_PRICE, P.PRODUCT_INFORMATION, P.PRODUCT_SIZE, P.PRODUCT_IMG, P.PRODUCT_GOOD, P.PRODUCT_GRADE, P.PRODUCT_DATE_REGISTER, P.PRODUCT_CATEGORY
 		FROM PAYMENT PAY, PRODUCT P
 		WHERE PAY.PRODUCT_NUMBER = P.PRODUCT_NUMBER

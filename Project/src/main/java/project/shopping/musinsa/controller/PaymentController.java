@@ -27,7 +27,7 @@ public class PaymentController {
 		String userId = "1";
 		List<PaymentVO> list = paymentService.read(userId);
 		for(PaymentVO a : list) {
-			logger.info(Integer.toString(a.getProductVO().getProductPrice()));
+			logger.info(a.toString());
 		}
 		model.addAttribute("list", list);
 		
