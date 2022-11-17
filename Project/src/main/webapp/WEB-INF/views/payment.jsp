@@ -47,9 +47,9 @@
 		<tbody id="tbody">
 			<c:forEach var="vo" items="${list}">
 				<tr id = 'parent'>
-					<td><img
+					<td><a href="detail?productNumber=${vo.productVO.productNumber}"><img
 						src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productVO.productImg}"
-						width="125px" height="150px"></td>
+						width="125px" height="150px"></a></td>
 					<td>${vo.productVO.productName}</td>
 					<td id="paymentNumber">${vo.paymentNumber}</td>
 					<td>${vo.paymentAmount}</td>
@@ -86,7 +86,7 @@
 				url : 'payment/' + paymentNumber,
 				headers : {
 					'content-type' : 'application/json',
-	                'x-HTTP-Method-Override' : 'POST'
+	                'x-HTTP-Method-Override' : 'PUT'
 				},
 				data : JSON.stringify(obj),
 				success : function (result, status) {

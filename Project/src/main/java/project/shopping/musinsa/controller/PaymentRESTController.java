@@ -35,12 +35,10 @@ public class PaymentRESTController {
 	
 	@PutMapping("/{paymentNumber}")
 	public ResponseEntity<Integer> updatePayment(
-			@PathVariable("paymentNumber") int paymentNumber,
-			@PathVariable("paymentState") String paymentState,
-			@RequestBody String paymentState1) {
-		logger.info(paymentState);
-		logger.info(Integer.toString(paymentNumber));
-				return null;
+			@RequestBody PaymentVO vo) {
+		logger.info(vo.toString());
+		int result = paymentService.update(vo);
+		return new ResponseEntity<Integer>(result, HttpStatus.OK);
 		
 	}
 	

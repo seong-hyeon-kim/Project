@@ -28,6 +28,12 @@ public class PaymentServiceImple implements PaymentService{
 		logger.info("read 호출 : userId = " + userId);
 		return dao.select(userId);
 	}
+
+	@Override
+	public int update(PaymentVO vo) {
+		logger.info("update() 호출 : vo = " + vo.toString());
+		return dao.update(vo);
+	}
 	
 	
 	

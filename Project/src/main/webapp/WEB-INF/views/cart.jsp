@@ -257,7 +257,7 @@ li {
 			
 		}); // end btn_+
 		
-		
+// 장바구니 수량
 		$('#table #cartAmount #btn_minus').click(function(){
 			var currentRow = $(this).closest('tr');
 			var cartAmount = currentRow.find('td:eq(4)').text();

@@ -42,5 +42,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		(${paymentNumber}, ${userId}, ${productNumber}, ${paymentPrice}, ${paymentAmount}, ${paymentProductSize})
 		values (#{paymentNumber}, #{userId}, #{productNumber}, #{paymentPrice}, #{paymentAmount}, #{paymentProductSize})
 	</insert>
-
+	
+	<update id="update">
+		update ${payment}
+		set ${paymentState} = #{paymentState}
+		where ${paymentNumber} = #{paymentNumber}
+	</update>
+	
 </mapper>

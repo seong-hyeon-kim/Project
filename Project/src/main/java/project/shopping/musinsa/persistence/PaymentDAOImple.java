@@ -30,6 +30,12 @@ public class PaymentDAOImple implements PaymentDAO{
 		logger.info("select 호출 : userId = " + userId);
 		return sqlSession.selectList(NAMESPACE + ".select_by_user_id", userId);
 	}
+
+	@Override
+	public int update(PaymentVO vo) {
+		logger.info("update 호출 () : vo = " + vo.toString());
+		return sqlSession.update(NAMESPACE + ".update", vo);
+	}
 	
 	
 	
