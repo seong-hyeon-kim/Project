@@ -3,6 +3,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+<% 
+	String userId= (String) session.getAttribute("userId");
+%>
 <style type="text/css">
 table, th, td {
    border-style: solid;
@@ -50,12 +53,15 @@ li {
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
+
 <meta charset="UTF-8">
 <link rel="stylesheet"
 	href="https://fonts.googleapis.com/icon?family=Material+Icons">
+	
 <title>상품상세설명</title>
 </head>
 <body>
@@ -170,19 +176,19 @@ li {
 			    merchant_uid: "payment_" + new Date().getTime(), // 상점에서 관리하는 주문 번호를 전달
 			    name : '${vo.productName }',
 			    amount : payPrice,
-			    buyer_name : '구매자이름',
+			    buyer_name : '<%=userId%>',
 			    
 			}, function(rsp) { // callback 로직
 				console.log(rsp);
 				if(rsp.success) {
 					var msg = '결제가 완료되었습니다.';
-					var userId = 1;
+					var userId = '<%=userId%>';
 					var productNumber = '${vo.productNumber}';
 					var paymentPrice = document.getElementById('payPrice').innerText;
 					var paymentAmount = document.getElementById('cartAmount').value;
 					var paymentProductSize = document.querySelector('input[name="size"]:checked').value;
 					var obj = {
-							'userId' : 1,
+							'userId' : userId,
 							'productNumber' : productNumber,
 							'paymentPrice' : paymentPrice,
 							'paymentAmount' : paymentAmount,

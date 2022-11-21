@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="project.shopping.musinsa.UserMapper">
+
+	<!-- 회원가입 -->
+	<insert id="insert">
+		insert into ${user_information} 
+		values (#{userId}, #{userPassword}, #{userName}, #{userGender}, #{userHeight},
+		#{userWeight}, #{userAge}, #{userEmail}, #{userPhone}, 
+		#{userAddress01}, #{userAddress02}, #{userAddress03}, #{userAddress04}, #{verify})
+	</insert>
+	
+	<!-- 회원 전체 검색 -->
+	<select id="seletct_all">
+	select * from ${user_information}
+	order by ${userId} desc
+	</select>
+	
+	<!-- 회원 조회 --> <!-- select는 resultType 필수 -->
+	<select id="select_by_user_id" resultType = "userVO">
+	select * from ${user_information} where ${userId} = #{userId}
+	</select>
+	
+
+	<!--  회원 결과  -->
+	<select id="userResult" resultType="userVO">
+	select * from ${user_information}
+	where ${userId} = #{userId}
+	</select>
+	
+	<!-- 회원 정보 수정 -->
+	<update id="update">
+	update  ${user_information}
+	set ${userPassword} = #{userPassword},
+	 ${userName} = #{userName}, 
+	 ${userGender} = #{userGender},
+	 ${userHeight} = #{userHeight}, 
+	 ${userWeight} = #{userWeight}, 
+	 ${userAge} = #{userAge}, 
+	 ${userEmail} = #{userEmail},
+	 ${userPhone} = #{userPhone}, 
+	 ${userAddress01} = #{userAddress01}, 
+	 ${userAddress02} = #{userAddress02}, 
+	 ${userAddress03} = #{userAddress03},
+	 ${userAddress04} = #{userAddress04}
+	where ${userId} = #{userId}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<delete id="delete">
+	delete from ${user_information}
+	where ${userId} = #{userId}
+	</delete>
+	
+	<!-- 아이디 중복 검사 --> <!-- select는 resultType 필수 --> <!-- count 행..을 가져온다 -->
+	<select id="idChk" resultType="int">
+	 select count (*) from ${user_information} where ${userId} = #{userId}
+	</select>
+	
+	<!-- 패스워드 체크 --> <!-- select는 resultType 필수 --> <!-- count 행..을 가져온다 -->
+	<select id="passwordChk" resultType="int">
+	select count (*) from ${user_information}
+	where ${userId} = #{userId}
+	and ${userPassword} = #{userPassword}
+	</select>
+	
+	<!-- 로그인  --> <!-- select는 resultType 필수 -->
+	<select id="login" parameterType="userVO">
+	select * from ${user_informaion} where ${userId} = #{userId} and ${userPassword} = #{userPassword}
+	</select>
+	
+	
+	</mapper>

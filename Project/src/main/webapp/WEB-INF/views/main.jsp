@@ -19,17 +19,192 @@ ul {
 
 
 </style>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
 <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+
+<% 
+
+	String loginChk = (String) session.getAttribute("loginChk");
+	String userId= (String) session.getAttribute("userId");
+	if(loginChk != null && loginChk.equals("Chk")){
+		session.setAttribute("loginChk", "");
+%>
+
+<% 		
+	}
+%>
+<style>
+*{
+	margin: 0;
+	padding:0;
+}
+/* 화면 전체 렙 */
+.wrapper{
+	width: 1900px;
+}
+/* content 랩 */
+.wrap{
+	width : 1080px;
+	margin: auto;
+}
+/* 홈페이지 기능 네비 */ 
+.top_gnb_area{
+	width: auto;
+    height: 50px;
+    background-color: white;
+}
+/* 로고, 검색, 로그인 */
+.top_area{
+	width: auto;
+    height: 150px;
+    /* background-color: #f7f0b9; */
+}
+/* 로고 영역 */
+.logo_area{
+	width: 100%;
+	height: 100%;
+	background-color: black;
+	float:left;
+}
+/* /* 검색 박스 영역 */ */
+/* .search_area{ */
+/* 	width: 50%; */
+/* 	height: 100%; */
+/* 	background-color: yellow; */
+/* 	float:left;	 */
+/* } */
+/* 로그인 버튼 영역 */
+ .login_area{
+	width: 25%;
+	height: 100%;
+	display: inline-block;	
+	text-align: center;	
+}
+/* .login_button{
+	height: 50%;
+    background-color: #D4DFE6;
+    margin-top: 30px;
+    line-height: 77px;
+    font-size: 40px;
+    font-weight: 900;
+    border-radius: 10px;
+    cursor: pointer;	 */
+}
+.login_area>span{
+	margin-top: 10px;
+    font-weight: 900;
+    display: inline-block;
+}
+.login_button{
+	height : 50%;
+	background-color: white;
+	margin-top:30px;
+}
+
+/* 제품 목록 네비 */
+.navi_bar_area{
+	width: 100%;
+    height: 70px;
+    background-color: white;
+}
+
+/* 홈페이지 메인 제품 목록  */
+.content_area{
+	width: 100%;
+    background-color: white;
+    height: 380px;
+}
+
+/* float 속성 해제 */
+.clearfix{
+	clear: both;
+}
+</style>
+
 </head>
 <body>
-	<h1>
-		<a style="text-decoration: none; color: black;" href="http://localhost:8080/musinsa/">MUSINSA</a>
-	</h1>
-	<a href="../musinsa/product/list"><input type="button" value="상품 등록창"></a>
-		<a href="http://localhost:8080/musinsa/payment"><input type="button" value="결제내역"></a>
-		<a href="http://localhost:8080/musinsa/cart"><input type="button" value="장바구니"></a>
-		<a href="http://localhost:8080/musinsa/like"><input type="button" value="좋아요"></a>
+
+
+<div class="wrapper" style="margin: auto;">
+
+	<div class="wrap">
+		<div class="top_gnb_area">
+			<div class="logo_area">
+				<h1><a style="text-decoration: none; color: white;" href="http://localhost:8080/musinsa/">MUSINSA</a></h1>
+			</div>
+		</div>
+		
+		<div class="top_area">
+			
+			<div class="login_area" >
+				<div id="login" class="login_button"><a href="/musinsa/user/login">로그인</a></div>
+				<div id="join" class="join_button"><a href="/musinsa/user/join">회원가입</a></div>
+				<div id ="userResult" class="mypage_button"><a href="/musinsa/user/userResult?userId='<%=userId%>'">마이페이지</a></div>
+				<div id="logout" style="display: none"><a href="/musinsa/user/logout">로그아웃</a></div>
+				<c:if test="${userId eq 'admin'}">
+					<div id="verify" class="verify_button"><a href="/musinsa/user/verify">관리자</a></div>
+					<a href="../musinsa/product/list"><input type="button" value="상품 등록창"></a>
+				</c:if>
+				<a href="http://localhost:8080/musinsa/payment"><input type="button" value="결제내역"></a>
+				<a href="http://localhost:8080/musinsa/cart"><input type="button" value="장바구니"></a>
+				<a href="http://localhost:8080/musinsa/like"><input type="button" value="좋아요"></a>
+			</div>
+			
+			
+		<div class="clearfix">구간1</div>			
+		</div>
+		
+		<div class="navi_bar_area">
+			<!-- <h5>3</h5> --> 
+				<!-- 슬릭 시작 -->
+	<div class="slide_div_wrap">
+				<div class="slide_div">
+					<div>
+						<a>
+							<img src="https://image.msscdn.net/images/img/2022111016554100000094448.jpg" width="800" height="400" style="margin: auto;">
+						</a>
+					</div>
+					<div>
+						<a>
+							<img src="https://image.msscdn.net/images/img/2022110909043700000045327.jpg" width="800" height="400" style="margin: auto;">
+						</a>
+					</div>
+					<div>
+						<a>
+							<img src="https://cdn.apnews.kr/news/photo/202010/20201025_1_bodyimg_1301291.JPG" width="800" height="400" style="margin: auto;">
+						</a>
+					</div>	
+					<div>
+						<a>
+							<img src="https://www.kocca.kr/n_content/vol24/img/new/special_people2/people2_7.jpg" width="800" height="400" style="margin: auto;">
+						</a>
+					</div>	
+				</div>	
+			</div>
+	<!-- 슬릭  끝 -->
+		</div>
+		
+		<div class="content_area">
+			<!-- <h5>4</h5> --> 
+			
+		</div>
+	</div>
+</div>
+<input type="hidden" id="insertAlert" value="${insert_result}">
+
+<!-- 로그인되면 로그인버튼이 로그아웃 되기ㅇ,로그인 되면 회원가입 버튼 없애기, user님 으로 뜨게하기, 버튼만들기(마이페이지,장바구니,고객센터,게시판(공지) ) -->
+
+
+
+
 	<hr>
+
+	
 	<c:forEach var="vo" items="${list}">
 	
 	<div class="productList">
@@ -53,8 +228,37 @@ ul {
 	</div>
 	
 	</c:forEach>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			$(".slide_div").slick(
+			{
+					dots: true,
+					autoplay : true,
+					autoplaySpeed: 3000
+			}		
+			);
+		});
+	</script>
+	
+	
 	
 	
 
 </body>
+
+<% 
+	if(userId != null){
+		
+%>
+<script type="text/javascript">
+ 	$('#login').hide();
+	$('#logout').show();	
+	$('#join').hide();
+	
+</script>
+
+<% 		
+	}
+%>
+
 </html>

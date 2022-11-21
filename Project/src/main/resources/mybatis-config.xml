@@ -56,6 +56,34 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		  
 		 <!-- HO -->
 		 
+		 
+		 <!-- 희 -->
+		 <!-- user_information 테이블 -->
+		 <property name ="user_information" value="user_information"/>
+		 <property name ="userId" value="user_id"/>
+		 <property name ="userPassword" value="user_password"/>
+		 <property name ="userName" value="user_name"/>
+		 <property name ="userGender" value="user_gender"/>
+		 <property name ="userHeight" value="user_height"/>   
+		 <property name ="userWeight" value="user_weight"/>
+		 <property name ="userAge" value="user_age"/>
+		 <property name ="userEmail" value="user_email"/>
+		 <property name ="userPhone" value="user_phone"/>
+		 <property name ="userAddress01" value="user_address01"/>
+		 <property name ="userAddress02" value="user_address02"/>
+		 <property name ="userAddress03" value="user_address03"/>
+		 <property name ="userAddress04" value="user_address04"/>
+		 <property name ="verify" value="verify"/>
+		
+		<!-- csqnaregister 테이블 -->
+		<property name="board" value="board"/>
+		<property name="boardNumber" value="board_number"/>
+		<property name="userId" value="user_id"/>
+		<property name="boardTitle" value="board_title"/>
+		<property name="boardContent" value="board_content"/>
+		<property name="boardDateCreated" value="board_date_created"/>
+		 <!-- 희 -->
+		 
 		
 		 
 	<!-- value = DB명 , name = 자바에서 쓸 이름 -->
