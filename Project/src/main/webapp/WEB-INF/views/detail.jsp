@@ -54,13 +54,14 @@ li {
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
+
 <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 
+
 <meta charset="UTF-8">
-<link rel="stylesheet"
-	href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
 	
 <title>상품상세설명</title>
 </head>
@@ -73,7 +74,7 @@ li {
 		<hr>
 	<form action="cart/register" method="POST">
 	
-	<div id=detail>
+	<div id=detail style="margin: auto;">
 		<input hidden="" style="border:none" type="number" name="productNumber" value="${vo.productNumber }" readonly="readonly">  
 		<p>상품 이름 : ${vo.productName }</p>
 		<p id="price">상품 가격 : ${vo.productPrice }</p>
@@ -100,20 +101,35 @@ li {
 		<p id="productGood"><i class="fas fa-heart"></i>  ${vo.productGood }</p>
 		<p>상품 평점 : ${vo.productGrade }</p>
 		<p>상품 정보 : ${vo.productInformation }</p>
-		<img src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productImg}" width="200px" height="180px">
-		
+		<img src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productImg}" >
 		<fmt:formatDate value="${vo.productDateRegister}"
 					pattern="yyyy-MM-dd HH:mm:ss" var="productDateRegister"/>
 		<p>상품 등록일 : ${productDateRegister }</p>
 		<input type="submit" value="add to cart">
+	
+		
+		
 		
 	</div>
 	</form>
-	
-		
 		<br><a href="/musinsa"><input type="button" value="상품 목록"></a>
 		<button id="btn_good">like</button>
 		<button id="btn_buy">buy</button>
+		
+		<br>
+		<br>
+		
+<details>
+    <summary>사진 펼치기</summary>
+    <c:forEach var="img" items="${imgList}">
+		<div>
+			<img src="http://localhost:8080/musinsa/product/display?fileName=/${img}" >
+		</div>
+		</c:forEach>
+</details>
+	
+		
+		
 	
 	<script type="text/javascript">
 	$(document).ready(function () {
@@ -132,7 +148,7 @@ li {
 		});
 		
 		$('#btn_good').click(function () {
-			var userId = 1;
+			var userId = '<%=userId%>';
 			var productNumber = ${vo.productNumber};
 			var obj = {
 					'userId' : userId,
@@ -220,12 +236,12 @@ li {
 		}); // end btn_buy.click()
 		
 		$('#btn_cart').click(function () {
-			var userId = 1;
+			var userId = <%=userId%>;
 			var productNumber = ${vo.productNumber};
 			var cartAmount = document.getElementById(cartAmount).innerText;
 			var cartSize = document.querySelector('input[name="size"]:checked').value;
 			var obj = {
-					'userId' : 1,
+					'userId' : userId,
 					'productNumber' : productNumber,
 					'cartAmount' : cartAmount,
 					'cartSize' : cartSize,

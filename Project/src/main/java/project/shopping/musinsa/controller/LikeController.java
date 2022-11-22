@@ -2,6 +2,9 @@ package project.shopping.musinsa.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,13 +25,16 @@ public class LikeController {
 	private ProductLikeService productLikeService;
 	
 	@GetMapping
-	public void like(Model model) {
+	public void like(Model model, HttpServletRequest request) {
 		logger.info("like »£√‚");
-		String userId = "1";
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("userId");
 		
 		List<ProductLikeVO> list = productLikeService.readLike(userId);
-		for(ProductLikeVO a : list) {
-			logger.info(a.toString());
+		String[] imgList = null;
+		for(ProductLikeVO vo : list) {
+			imgList = vo.getProductVO().getProductImg().split(" ");
+			vo.getProductVO().setProductImg(imgList[0].toString());
 		}
 		model.addAttribute("list", list);
 	}

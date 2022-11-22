@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import project.shopping.musinsa.domain.ProductVO;
 import project.shopping.musinsa.pageutil.PageCriteria;
@@ -38,10 +37,18 @@ public class MainController {
 		}
 		
 		List<ProductVO> list = productService.read(criteria);
+		String[] imgList = null;
+		logger.info("list = "+list.toString());
 		for (ProductVO vo : list) {
-			logger.info(vo.toString());
+			 imgList = vo.getProductImg().split(" "); 
+			 vo.setProductImg(imgList[0].toString());
+			 logger.info("이미지 리스트 = " + imgList[0].toString());
+
 		}
+		
+		
 		model.addAttribute("list", list);
+		model.addAttribute("imgList", imgList);
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);

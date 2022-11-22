@@ -6,6 +6,7 @@
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <meta charset="UTF-8">
 <title>${vo.productName }</title>
 </head>
@@ -21,7 +22,11 @@
 		<p>상품 정보 : ${vo.productInformation }</p>
 		<p>상품 좋아요 : ${vo.productGood }</p>
 		<p>상품 평점 : ${vo.productGrade }</p>
-		<p>상품 사진 : </p> <img src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productImg}" width="200px" height="180px">
+		<p>상품 사진 : 
+		<img src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productImg }" >
+		
+		
+		
 		<fmt:formatDate value="${vo.productDateRegister}"
 					pattern="yyyy-MM-dd HH:mm:ss" var="productDateRegister"/>
 		<p>상품 등록일 : ${productDateRegister }</p>
@@ -36,5 +41,15 @@
 		<input type="hidden" name="productNumber" value="${vo.productNumber}">
 		<input type="submit" value="상품 삭제">
 	</form>
+	
+<details>
+    <summary>사진 펼치기</summary>
+    <c:forEach var="img" items="${imgList}">
+		<div>
+			<img src="http://localhost:8080/musinsa/product/display?fileName=/${img}" >
+		</div>
+		</c:forEach>
+</details>
+	
 </body>
 </html>

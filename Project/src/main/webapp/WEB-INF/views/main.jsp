@@ -45,11 +45,11 @@ ul {
 }
 /* 화면 전체 렙 */
 .wrapper{
-	width: 1900px;
+	width: auto;
 }
 /* content 랩 */
 .wrap{
-	width : 1080px;
+	width : 1095px;
 	margin: auto;
 }
 /* 홈페이지 기능 네비 */ 
@@ -142,9 +142,15 @@ ul {
 		<div class="top_area">
 			
 			<div class="login_area" >
+			<c:if test="${not empty sessionScope.userId}">
+			어서오세요 <%=userId%>님
+			</c:if>
+				
 				<div id="login" class="login_button"><a href="/musinsa/user/login">로그인</a></div>
 				<div id="join" class="join_button"><a href="/musinsa/user/join">회원가입</a></div>
-				<div id ="userResult" class="mypage_button"><a href="/musinsa/user/userResult?userId='<%=userId%>'">마이페이지</a></div>
+				<c:if test="${not empty sessionScope.userId}">
+					<div id ="userResult" class="mypage_button"><a href="/musinsa/user/userResult?userId='<%=userId%>'">마이페이지</a></div>				
+				</c:if>
 				<div id="logout" style="display: none"><a href="/musinsa/user/logout">로그아웃</a></div>
 				<c:if test="${userId eq 'admin'}">
 					<div id="verify" class="verify_button"><a href="/musinsa/user/verify">관리자</a></div>
@@ -193,23 +199,14 @@ ul {
 			<!-- <h5>4</h5> --> 
 			
 		</div>
-	</div>
-</div>
-<input type="hidden" id="insertAlert" value="${insert_result}">
-
-<!-- 로그인되면 로그인버튼이 로그아웃 되기ㅇ,로그인 되면 회원가입 버튼 없애기, user님 으로 뜨게하기, 버튼만들기(마이페이지,장바구니,고객센터,게시판(공지) ) -->
-
-
-
-
-	<hr>
-
+		
+		<!-- test -->
+		<hr>
+		<c:forEach var="vo" items="${list}">
 	
-	<c:forEach var="vo" items="${list}">
-	
-	<div class="productList">
+	<div class="productList" style="margin: auto;">
 		<ul>
-			<li  style="margin-left:0px; margin-right:0px; border: 1px solid grey; width: 150px; height: 280px; text-align: center;    display: table-cell; vertical-align: middle;" >
+			<li  style="margin:auto; border: 1px solid grey; width: 150px; height: 280px; text-align: center;    display: table-cell; vertical-align: middle;" >
 				<a href="detail?productNumber=${vo.productNumber }"> <!-- 누르면 상세페이지 이동 -->
 					<div class="photo">
 						<img alt="" src="product/display?fileName=/${vo.productImg}" style="width: 125px; height: 150px;">
@@ -228,6 +225,21 @@ ul {
 	</div>
 	
 	</c:forEach>
+		
+		
+	</div>
+</div>
+<input type="hidden" id="insertAlert" value="${insert_result}">
+
+<!-- 로그인되면 로그인버튼이 로그아웃 되기ㅇ,로그인 되면 회원가입 버튼 없애기, user님 으로 뜨게하기, 버튼만들기(마이페이지,장바구니,고객센터,게시판(공지) ) -->
+
+
+
+
+	
+
+	
+	
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$(".slide_div").slick(

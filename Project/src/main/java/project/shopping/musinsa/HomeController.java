@@ -41,10 +41,15 @@ public class HomeController {
 		}
 		
 		List<ProductVO> list = productService.read(criteria);
+		
+		String[] imgList = null;
+		logger.info("list = "+list.toString());
 		for (ProductVO vo : list) {
-			logger.info(vo.toString());
+			 imgList = vo.getProductImg().split(" "); 
+			 vo.setProductImg(imgList[0].toString());
 		}
 		model.addAttribute("list", list);
+		model.addAttribute("imgList", imgList);
 		
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCriteria(criteria);

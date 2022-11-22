@@ -37,8 +37,8 @@ li {
 		<thead>
 			<tr>
 				<th style="width: 60px">번호</th>
-				<th style="width: 120px">작성자</th>
 				<th style="width: 120px">제목</th>
+				<th style="width: 120px">작성자</th>
 				<th style="width: 120px">내용</th>
 				<th style="width: 100px">작성일</th>
 			</tr>
@@ -53,7 +53,7 @@ li {
 					</td>
 					
 					<td>${vo.userId }</td>
-					<td>${vo.boardTitle }</td>
+					<td>${vo.boardContent }</td>
 					<fmt:formatDate value="${vo.boardDateCreated }"
 					pattern="yyyy-MM-dd HH:mm:ss" var="boardDateCreated"/>
 					<td>${boardDateCreated }</td>

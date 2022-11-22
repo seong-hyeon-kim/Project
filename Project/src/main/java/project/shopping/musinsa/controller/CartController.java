@@ -3,6 +3,7 @@ package project.shopping.musinsa.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,18 +27,31 @@ public class CartController {
 	private CartService cartService;
 
 	@GetMapping
-	public void cart(Model model) {
+	public void cart(Model model, HttpServletRequest request) {
 		logger.info("cart호출");
-		String userId = "1";
-
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("userId");
+		logger.info(userId);
+		
 		List<CartVO> list = cartService.read(userId);
+		String[] imgList = null;
+		
+		for(CartVO vo : list) {
+			imgList = vo.getProductVO().getProductImg().split(" ");
+			vo.getProductVO().setProductImg(imgList[0].toString());
+		}
+		
 		model.addAttribute("list", list);
 	}
 
 	@PostMapping("/register")
 	public String registerPOST(Model model, CartVO vo, HttpServletRequest request, RedirectAttributes reAttr) {
 		logger.info("register 호출");
-		vo.setUserId("1");
+		
+		HttpSession session = request.getSession();
+		String userId = (String) session.getAttribute("userId");
+		logger.info(userId);
+		vo.setUserId(userId);
 		List<String> resultCartVoList = cartService.readC(vo.getUserId());
 		
 		if (resultCartVoList.size() == 0) {

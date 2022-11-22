@@ -31,9 +31,12 @@
 			 	L<input type="checkbox" name="size" value="L">	
 			 	XL<input type="checkbox" name="size" value="XL">
 			<br>
-		  	<input type="file" id="gdsImg" name="files" multiple="multiple" />
+			<font color = "red">파일은 역순으로 선택</font>
+			<br>
+		  	<input type="file" id="gdsImg" name="files" multiple="multiple" /> 
 			<br>
 			카테고리 : 상의<input type="radio" name="productCategory" value="상의"> 하의<input type="radio" name="productCategory" value="하의">
+			신발<input type="radio" name="productCategory" value="신발"> 모자<input type="radio" name="productCategory" value="모자">
 			<br><br>
 			<input type="submit" value="상품 등록">
 	</form>

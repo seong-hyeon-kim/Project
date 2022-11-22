@@ -6,8 +6,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 	<!-- 게시물 등록-->
 	<insert id="board_insert">
-		insert into ${board} (${boardNumber}, ${userId}, ${boardTitle}, ${boardContent})
-		values (SEQ_BOARD.NEXTVAL, #{userId}, #{boardTitle}, #{boardContent})
+		insert into ${board} (${userId}, ${boardTitle}, ${boardContent})
+		values (#{userId}, #{boardTitle}, #{boardContent})
 	</insert>
 	
 	

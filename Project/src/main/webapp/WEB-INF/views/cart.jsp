@@ -7,6 +7,9 @@
 <html>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <head>
+<% 
+	String userId= (String) session.getAttribute("userId");
+%>
 <style type="text/css">
 table, th, td {
 	border-style: none;
@@ -134,13 +137,13 @@ li {
 			    merchant_uid: "payment_" + new Date().getTime(), // 상점에서 관리하는 주문 번호를 전달
 			    name : productName + ' 포함 ' + rowsTable + '개',
 			    amount : totalPrice,
-			    buyer_name : '구매자이름',
+			    buyer_name : '<%=userId%>',
 			}, function(rsp) { // callback 로직
 				console.log(rsp);
 				if(rsp.success) {
 					var msg = '결제가 완료되었습니다.';
 					for(var i = 1; i < rows; i++){
-						var userId = 1;
+						var userId = '<%=userId%>';
 						var productNumber =  table.rows[i].cells[6].innerHTML;
 						console.log(productNumber);
 						var paymentPrice = table.rows[i].cells[2].innerHTML;
@@ -150,7 +153,7 @@ li {
 						var paymentProductSize = table.rows[i].cells[3].innerHTML;
 						console.log(paymentProductSize);
 						var obj = {
-								'userId' : 1,
+								'userId' : userId,
 								'productNumber' : productNumber,
 								'paymentPrice' : paymentPrice,
 								'paymentAmount' : paymentAmount,
@@ -211,6 +214,7 @@ li {
 		
 // 장바구니 수정
 		$('#table #cartAmount #btn_plus').click(function(){
+			var userId = '<%=userId%>';
 			var currentRow = $(this).closest('tr');
 			var cartAmount = currentRow.find('td:eq(4)').text();
 			console.log(cartAmount); // 2
@@ -225,7 +229,7 @@ li {
 			var price = cartAmount * productPrice;
 			console.log(price);
 			var obj = {
-					'userId' : 1,
+					'userId' : userId,
 					'productNumber' : productNumber,
 					'cartAmount' : cartAmount,
 					'cartSize' : cartSize,
@@ -259,6 +263,7 @@ li {
 		
 // 장바구니 수량
 		$('#table #cartAmount #btn_minus').click(function(){
+			var userId = '<%=userId%>';
 			var currentRow = $(this).closest('tr');
 			var cartAmount = currentRow.find('td:eq(4)').text();
 			console.log(cartAmount);
@@ -273,7 +278,7 @@ li {
 			var cartNumber = currentRow.find('td:eq(7)').text();
 			var cartSize = currentRow.find('td:eq(3)').text();
 			var obj = {
-					'userId' : 1,
+					'userId' : userId,
 					'productNumber' : productNumber,
 					'cartAmount' : cartAmount,
 					'cartSize' : cartSize,
@@ -333,8 +338,6 @@ li {
 							location.reload();
 						}
 					}
-					
-					
 				}) // end ajax();
 			} // end if
 			
