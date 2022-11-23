@@ -1,5 +1,6 @@
 package project.shopping.musinsa.controller;
 
+import java.io.PrintWriter;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -8,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -50,6 +52,9 @@ public class CartController {
 		
 		HttpSession session = request.getSession();
 		String userId = (String) session.getAttribute("userId");
+		if(userId.equals(null)) {
+			
+		}
 		logger.info(userId);
 		vo.setUserId(userId);
 		List<String> resultCartVoList = cartService.readC(vo.getUserId());

@@ -61,10 +61,13 @@ li {
 
 
 <meta charset="UTF-8">
-
+<% 
+	String SessionUserId= (String) session.getAttribute("userId");
+%>
 	
 <title>상품상세설명</title>
 </head>
+
 <body>
 	<h1><a style="text-decoration: none; color: black;" href="http://localhost:8080/musinsa/">MUSINSA</a></h1>
 	<h3>상품 정보</h3>
@@ -75,8 +78,9 @@ li {
 	<form action="cart/register" method="POST">
 	
 	<div id=detail style="margin: auto;">
-		<input hidden="" style="border:none" type="number" name="productNumber" value="${vo.productNumber }" readonly="readonly">  
-		<p>상품 이름 : ${vo.productName }</p>
+		<input hidden="" style="border:none" type="number" id="productNumber" name="productNumber" value="${vo.productNumber }" readonly="readonly">  
+		상품 이름 : <input style="border:none" type="text" id="productName" name="productName" value="${vo.productName }" readonly="readonly">
+		
 		<p id="price">상품 가격 : ${vo.productPrice }</p>
 		<p>상품 카테고리 : ${vo.productCategory }</p>
 		<p>상품 사이즈 : 		
@@ -101,15 +105,15 @@ li {
 		<p id="productGood"><i class="fas fa-heart"></i>  ${vo.productGood }</p>
 		<p>상품 평점 : ${vo.productGrade }</p>
 		<p>상품 정보 : ${vo.productInformation }</p>
-		<img src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productImg}" >
+		<img id="productImg" src="http://localhost:8080/musinsa/product/display?fileName=/${vo.productImg}" >
 		<fmt:formatDate value="${vo.productDateRegister}"
 					pattern="yyyy-MM-dd HH:mm:ss" var="productDateRegister"/>
 		<p>상품 등록일 : ${productDateRegister }</p>
-		<input type="submit" value="add to cart">
+		<c:if test="${not empty sessionScope.userId}">
+			<input type="submit" value="add to cart">	
+		</c:if>
+		
 	
-		
-		
-		
 	</div>
 	</form>
 		<br><a href="/musinsa"><input type="button" value="상품 목록"></a>
@@ -120,7 +124,7 @@ li {
 		<br>
 		
 <details>
-    <summary>사진 펼치기</summary>
+    <summary id="">상세 정보 펼치기</summary>
     <c:forEach var="img" items="${imgList}">
 		<div>
 			<img src="http://localhost:8080/musinsa/product/display?fileName=/${img}" >
@@ -149,6 +153,10 @@ li {
 		
 		$('#btn_good').click(function () {
 			var userId = '<%=userId%>';
+			if(userId === 'null') {
+				alert('로그인이 필요한 서비스 입니다.');
+				return;
+			}
 			var productNumber = ${vo.productNumber};
 			var obj = {
 					'userId' : userId,
@@ -177,8 +185,42 @@ li {
 			
 		}); // end btn_good.click()
 		
+// 비회원 간단가입 팝업
+		function showPopUp() {
+			// 창 크기
+			var width = 552;
+			var height = 520;
+			
+			// pop 화면 기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2); // 에러는 아니지만 인식문제로 에러표시
+			var top = (window.screen.height / 4);
+			
+			// 윈도우 속성 지정
+			var windowStatus = 'width='+width+', height='+height+', left='+left+', top='+top+', scrollbars=yes, status=yes, resizable=yes, titlebar=yes';
+			
+			// 연결을 원하는 url
+			const url = "user/simpleJoin";
+			
+			// 등록된 url 및  window 속성 기준으로 팝업창을 연다.
+			
+			window.open(url, "hello", windowStatus);
+			
+		}
+		
 // 구매버튼
 		$('#btn_buy').click(function(){
+			var userId = '<%=userId%>';
+			if(userId === 'null') {
+				if(!confirm('비회원으로 주문하시겠습니까?')) {
+					// 아니오
+					location.href = 'user/login';
+					return;
+				} else {
+					// 응
+					showPopUp();
+					return;
+				}
+			}
 			var IMP = window.IMP;
 			var payPrice = document.getElementById('payPrice').innerText;
 			if($('input:radio[name=size]').is(':checked') == false){

@@ -1,15 +1,14 @@
 package project.shopping.musinsa.controller;
 
-import java.io.PrintWriter;
+import java.time.LocalTime;
+import java.util.Random;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,8 +16,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import project.shopping.musinsa.domain.NonUserVO;
+import project.shopping.musinsa.domain.PaymentVO;
 import project.shopping.musinsa.domain.UserVO;
 import project.shopping.musinsa.persistence.UserDAO;
+import project.shopping.musinsa.service.NonUserService;
+import project.shopping.musinsa.service.PaymentService;
 import project.shopping.musinsa.service.UserService;
 
 @Controller
@@ -29,9 +32,77 @@ public class LoginController {
 
 	@Autowired
 	private UserService userService;
+	
+	@Autowired
+	private NonUserService nonUserService;
 
 	@Autowired
 	private UserDAO userDao;
+	
+	@Autowired
+	private PaymentService paymentService;
+	
+	@GetMapping("/nonUserPayment")
+	public void nonUserPayment() {
+		
+	}
+	
+	// 비회원
+	@GetMapping("/simpleJoin")
+	public void simpleJoinGet() {
+		
+	}
+	
+	@PostMapping("/simpleJoin") 
+		public String simpleJoinPOST(NonUserVO vo, PaymentVO Pvo, HttpServletRequest request) {
+		int leftLimit = 48; // numeral '0'
+		int rightLimit = 122; // letter 'z'
+		int targetStringLength = 10;
+		Random random = new Random();
+
+		String generatedString = random.ints(leftLimit,rightLimit + 1)
+		  .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+		  .limit(targetStringLength)
+		  .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+		  .toString();
+		
+		
+		LocalTime time = LocalTime.now();
+		String timeA = time.toString();
+		String timeAA = timeA.substring(9);
+		String nonUserId = generatedString+timeAA;
+		vo.setUserId(nonUserId);
+		String ad1 = request.getParameter("nonUserAddressNum");
+		String ad2 = request.getParameter("nonUserAddress1");
+		String ad3 = request.getParameter("nonUserAddress2");
+		String ad4 = request.getParameter("nonUserAddress3");
+		String add = ad1 + " " + ad2 + " " + ad3 + " " + ad4;
+		vo.setNonUserAddress(add);
+		vo.setNonUserEmail(request.getParameter("nonUserEmail"));
+		vo.setNonUserPhone(request.getParameter("nonUserPhone"));
+		logger.info(vo.toString());
+		
+		int result = nonUserService.create(vo);
+		if(result == 1) {
+			Pvo.setUserId(nonUserId);
+			Pvo.setProductNumber(Integer.parseInt(request.getParameter("productNumber")));
+			Pvo.setPaymentPrice(Integer.parseInt(request.getParameter("paymentPrice")));
+			Pvo.setPaymentAmount(Integer.parseInt(request.getParameter("paymentAmount")));
+			Pvo.setPaymentProductSize(request.getParameter("paymentProductSize"));
+			int resultPayment = paymentService.create(Pvo);
+			if(resultPayment == 1 ) {
+				logger.info("비회원 구매 성공");
+				return "redirect:nonUserPayment";
+			} else {
+				logger.info("비회원 구매 실패");
+				return "redirect:/";
+			}
+		} else {
+			logger.info("계정 생성 실패");
+			return "redirect:/";
+		}
+		}
+	
 
 	// 회원가입
 	@GetMapping("/join")

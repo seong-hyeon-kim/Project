@@ -42,6 +42,11 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		 <property name="paymentProductSize" value="payment_product_size"/>
 		 <property name="paymentState" value="payment_state"/>
 
+		<property name ="nonUser" value="non_user"/>
+		 <property name ="userId" value="user_id"/>
+		 <property name ="nonUserPhone" value="non_user_phone"/>
+		 <property name ="nonUserEmail" value="non_user_email"/>
+		 <property name ="nonUserAddress" value="non_user_address"/>
 
 		 
 		 <!-- HO -->
