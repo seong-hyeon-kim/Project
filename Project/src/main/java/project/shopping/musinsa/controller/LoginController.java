@@ -49,7 +49,25 @@ public class LoginController {
 	
 	// 비회원
 	@GetMapping("/simpleJoin")
-	public void simpleJoinGet() {
+	public void simpleJoinGet(Model model) {
+		int leftLimit = 48; // numeral '0'
+		int rightLimit = 122; // letter 'z'
+		int targetStringLength = 10;
+		Random random = new Random();
+
+		String generatedString = random.ints(leftLimit,rightLimit + 1)
+		  .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+		  .limit(targetStringLength)
+		  .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+		  .toString();
+		
+		
+		LocalTime time = LocalTime.now();
+		String timeA = time.toString();
+		String timeAA = timeA.substring(9);
+		String nonUserId = generatedString+timeAA;
+		
+		model.addAttribute("nonUserId", nonUserId);
 		
 	}
 	
@@ -108,6 +126,7 @@ public class LoginController {
 	@GetMapping("/join")
 	public void joinGET() {
 		logger.info("joinGET() 호출");
+		
 	} // end joinGet
 
 	@PostMapping("/join")
@@ -128,6 +147,7 @@ public class LoginController {
 	@GetMapping("/login")
 	public String loginGET() {
 		logger.info("loginGET() 호출");
+		
 		return "user/login";
 	} // end loginGET
 
@@ -136,14 +156,14 @@ public class LoginController {
 	public String loginPOST(Model model, String userId, String userPassword, HttpServletRequest request)
 			throws Exception {
 		logger.info("loginPOST() 호출");
-		UserVO vo = userDao.select(userId);
+		UserVO uvo = userDao.select(userId);
 
-		if (userPassword.equals(vo.getUserPassword())) {
+		if (userPassword.equals(uvo.getUserPassword())) {
 			logger.info("로그인 성공");
 			HttpSession session = request.getSession();
 			session.setAttribute("userId", userId);
 			session.setAttribute("loginChk", "Chk");
-			session.setAttribute("UserVO", vo);
+			session.setAttribute("uvo", uvo);
 
 			// 세션에서 targetURL 가져오기
 			String targetURL = (String) session.getAttribute("targetURL");

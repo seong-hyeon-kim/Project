@@ -7,10 +7,15 @@
 <meta charset="UTF-8">
 <title>상품 문의</title>
 </head>
+<%
+	String userId = (String) session.getAttribute("userId");
+%>
 <body>
 	<h2>상품 문의</h2>
+	<form>
 	<!-- 상품 정보 가져오기 -->
-		아이디 : <input type="text" name="userId" placeholder="아이디 입력" required="required"><br><br>
+	<input type="hidden" name="productNumber" value="${productNumber }">
+		아이디 : <input type="text" name="userId" placeholder="아이디 입력" value="<%=userId %>" readonly><br><br> <!-- userId 받아와야 함 -->
 		문의 유형 : <input type="radio" name="productQuestionType" value="사이즈" required="required">사이즈
 				<input type="radio" name="productQuestionType" value="배송">배송
 				<input type="radio" name="productQuestionType" value="재입고">재입고
@@ -29,17 +34,17 @@
 		<br><br><br>
 		<input type="submit" value="문의글 작성" id="sendPost"
 		style="background-color: black; color: white; width: 100px; height: 50px; margin-left: 70%; border: none;">
-		
+	</form>
 	<!-- 문의글 작성 클릭시 팝업창 닫고 Q&A.jsp로 데이터 전송 후 이동 -->
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#sendPost').click(function() {
+				var productNumber = $('input[name=productNumber]').val();
 				var userId = $('input[name=userId]').val();
 				var productQuestionType = $('input[name=productQuestionType]:checked').val();
 				var productQuestionTitle = $('input[name=productQuestionTitle]').val();
 				var productQuestionContent = $('textarea[name=productQuestionContent]').val();
 	
-				// ㅅㅂ 이거 넣으니까 안된다
 				
   				if(userId == '') {
 					alert('[오류] 아이디는 필수 입력 사항입니다.')
@@ -55,6 +60,7 @@
 					return;
 				} 
 				var obj = {
+						'productNumber' : productNumber,
 						'userId' : userId,
 						'productQuestionType' : productQuestionType,
 						'productQuestionTitle' : productQuestionTitle,
@@ -77,7 +83,7 @@
 						console.log(status);
 						if(result == 1) {
 							alert('정상적으로 등록 되었습니다.');
-							window.opener.location.href="/musinsa/detail?productNumber=75"
+						 	window.opener.location.href="/musinsa/detail?productNumber=" + productNumber;
 							window.close();
 						} 
 					}

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.shopping.musinsa.ReplyMapper">
+	<insert id="insertReply" parameterType="java.util.HashMap">
+		insert into ${reply}
+		(${reviewNumber}, ${replyContent}, ${userId})
+		values(#{reviewNumber}, #{replyContent}, #{userId})
+	</insert>
+	
+	<select id="selectReplyList" resultType="ReplyVO">
+		select * from ${reply}
+		where ${reviewNumber} = #{reviewNumber}
+		order by ${replyNumber} desc
+	</select>
+	
+	<update id="update">
+		update ${reply}
+		set ${replyContent} = #{replyContent}
+		where ${replyNumber} = #{replyNumber}
+	</update>
+	
+	<delete id="delete">
+		delete from ${reply}
+		where ${replyNumber} = #{replyNumber}
+	</delete>
+	
+</mapper>

@@ -10,10 +10,10 @@ public interface QnaDAO {
 	int insert(QnaVO vo);
 	
 	// 전체검색
-	List<QnaVO> select();
+	List<QnaVO> select(int productNumber);
 	
 	// 상세검색(하나만)
-	QnaVO select(int productQuestionNumber);
+	QnaVO select1(int productQuestionNumber);
 	
 	// 수정
 	int update(QnaVO vo);
@@ -22,10 +22,10 @@ public interface QnaDAO {
 	int delete(int productQuestionNumber);
 	
 	// 페이징 처리
-	List<QnaVO> select(PageCriteria criteria);
+	List<QnaVO> select(PageCriteria criteria, int productNumber);
 	
 	// 총 게시글 수
-	int getTotalCounts();
+	int getTotalCounts(int productNumber);
 	
 	
 

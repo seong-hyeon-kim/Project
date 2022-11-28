@@ -26,19 +26,20 @@ public class QnaServiceImple implements QnaService {
 	} // end create()
 
 	@Override
-	public List<QnaVO> read(PageCriteria criteria) {
-		logger.info("read() 호출");
+	public List<QnaVO> read(PageCriteria criteria, int productNumber) {
+		logger.info("read() 호출 ");
 		logger.info("start = " + criteria.getStart());
 		logger.info("end = " + criteria.getEnd());
-		return dao.select(criteria);
+		return dao.select(criteria, productNumber);
 	} // end read()
 
-	@Override
+	
+	@Override 
 	public QnaVO read(int productQuestionNumber) {
-		logger.info("read() 호출 : productQuestionNumber = " + productQuestionNumber);
-		return dao.select(productQuestionNumber);
+		logger.info("read() 호출 : productQuestionNumber = " + productQuestionNumber); 
+		return dao.select1(productQuestionNumber); 
 	} // end read()
-
+	 
 	@Override
 	public int update(QnaVO vo) {
 		logger.info("update() 호출 : vo = " + vo.toString());
@@ -52,9 +53,9 @@ public class QnaServiceImple implements QnaService {
 	}
 
 	@Override
-	public int getTotalCounts() {
-		logger.info("getTotalCounts() 호출");
-		return dao.getTotalCounts();
+	public int getTotalCounts(int productNumber) {
+		logger.info("getTotalCounts() 호출, productNumber = " + productNumber);
+		return dao.getTotalCounts(productNumber);
 	} // end getTotalCounts()
 
 } // end QnaServiceImple

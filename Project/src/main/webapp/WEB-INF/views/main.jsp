@@ -34,6 +34,9 @@ ul {
 	if(loginChk != null && loginChk.equals("Chk")){
 		session.setAttribute("loginChk", "");
 %>
+<script type="text/javascript">
+	alert('로그인 성공');
+</script>
 
 <% 		
 	}

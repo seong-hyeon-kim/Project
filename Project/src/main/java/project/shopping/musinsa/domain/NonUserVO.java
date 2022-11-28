@@ -5,9 +5,9 @@ public class NonUserVO {
 	private String nonUserEmail;
 	private String nonUserAddress;
 	private String userId;
-	
 	public NonUserVO() {
-		
+		super();
+		// TODO Auto-generated constructor stub
 	}
 	public NonUserVO(String nonUserPhone, String nonUserEmail, String nonUserAddress, String userId) {
 		super();
@@ -45,6 +45,8 @@ public class NonUserVO {
 		return "NonUserVO [nonUserPhone=" + nonUserPhone + ", nonUserEmail=" + nonUserEmail + ", nonUserAddress="
 				+ nonUserAddress + ", userId=" + userId + "]";
 	}
+	
+	
 	
 	
 }

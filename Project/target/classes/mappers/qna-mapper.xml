@@ -7,18 +7,19 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 등록 -->
 	<insert id="insert">
 		insert into ${product_question}
-		(${userId}, ${productQuestionType}, ${productQuestionContent}, ${productQuestionTitle})
-		values (#{userId}, #{productQuestionType}, #{productQuestionContent}, #{productQuestionTitle})
+		(${productNumber}, ${userId}, ${productQuestionType}, ${productQuestionContent}, ${productQuestionTitle})
+		values (#{productNumber}, #{userId}, #{productQuestionType}, #{productQuestionContent}, #{productQuestionTitle})
 	</insert>
 	
 	<!-- 전체검색 -->
 	<select id="select_all" resultType="QnaVO">
-		select * from ${product_question} 
+		select * from
+		(select * from ${product_question} where ${productNumber} = #{productNumber})
 		order by ${productQuestionNumber} desc
 	</select>
 	
 	<!-- 상세검색 -->
-	<select id="select_by_question_number" resultType="QnaVO">
+	<select id="select_by_product_number" resultType="QnaVO">
 		select * from ${product_question}
 		where ${productQuestionNumber} = #{productQuestionNumber}
 	</select>
@@ -41,14 +42,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<!-- 페이징 처리 -->
 	<select id="paging" resultType="QnaVO">
 		select q.${productQuestionNumber}, q.${userId}, q.${productQuestionWhether}, q.${productQuestionType},
-				q.${productQuestionContent}, q.${productQuestionDateCreated}, q.${productQuestionTitle} from (
+				q.${productQuestionContent}, q.${productQuestionDateCreated}, q.${productQuestionTitle}, q.${productNumber} from (
 					select rownum rn, a.* from (
-						select * from ${product_question} order by ${productQuestionNumber} desc
+						select * from 
+							(select * from ${product_question} where ${productNumber} = #{productNumber})
+						${product_question} order by ${productQuestionNumber} desc
 					)a
 				)q where rn between #{start} and #{end}
 	</select>
 	
+	<!-- 제품에 따른 게시글 갯수 출력 -->
 	<select id="total_count" resultType="Integer">
 		select count(*) total_cnt from ${product_question}
+		where ${productNumber} = #{productNumber}
 	</select>
+	
+	<!-- 각 제품에 달린 리뷰 별로 리뷰글 갯수 출력 -->
 </mapper>

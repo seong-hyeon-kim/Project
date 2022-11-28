@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="project.shopping.musinsa.ReviewMapper">
+	<insert id="insert">
+		insert into ${review}
+		(${userId}, ${productNumber}, ${reviewContent}, ${reviewGrade}, ${userAge}, ${userGender})
+		values (#{userId}, #{productNumber}, #{reviewContent}, #{reviewGrade}, #{userAge}, #{userGender})
+	</insert>
+	
+	<!-- 제품 번호에 따른 리뷰글 전체검색 -->
+	<!-- + resultMap 사용해서 UserVO에 필요한 것들도 같이 가져오는 문장을 만들어야함 -->
+	<resultMap type="ReviewVO" id="reviewMap">
+		<id column="REVIEW_NUMBER" property="reviewNumber"/>
+		<result column="USER_ID" property="userId"/>
+		<result column="PRODUCT_NUMBER" property="productNumber"/>
+		<result column="REVIEW_CONTENT" property="reviewContent"/>
+		<result column="REVIEW_GRADE" property="reviewGrade"/>
+		<result column="USER_AGE" property="userAge"/>
+		<result column="USER_GENDER" property="userGender"/>
+		<result column="REVIEW_DATE_CREATED" property="reviewDateCreated"/>
+		
+		<association javaType="UserVO" property="uvo">
+			<id column="USER_ID" property="userId"/>
+			<result column="USER_PASSWORD" property="userPassword"/>
+			<result column="USER_NAME" property="userName"/>
+			<result column="USER_GENDER" property="userGender"/>
+			<result column="USER_HEIGHT" property="userHeight"/>
+			<result column="USER_WEIGHT" property="userWeight"/>
+			<result column="USER_AGE" property="userAge"/>
+			<result column="USER_EMAIL" property="userEmail"/>
+			<result column="USER_PHONE" property="userPhone"/>
+			<result column="USER_ADDRESS01" property="userAddress01"/>
+			<result column="USER_ADDRESS02" property="userAddress02"/>
+			<result column="USER_ADDRESS03" property="userAddress03"/>
+			<result column="USER_ADDRESS04" property="userAddress04"/>
+			<result column="VERIFY" property="verify"/>
+		</association>
+	</resultMap>
+	
+	<select id="select_by_product_number" parameterType="java.util.ArrayList" resultMap="reviewMap">
+		select R.REVIEW_NUMBER, R.USER_ID, R.PRODUCT_NUMBER, R.REVIEW_CONTENT, R.REVIEW_GRADE, R.USER_AGE, R.USER_GENDER, R.REVIEW_DATE_CREATED, U.USER_WEIGHT, U.USER_HEIGHT
+			from REVIEW R, USER_INFORMATION U
+			WHERE R.USER_ID = U.USER_ID
+		and R.PRODUCT_NUMBER = #{productNumber} order by R.REVIEW_NUMBER desc
+	</select>
+	
+	<!-- 수정 -->
+	<update id="update">
+		update ${review}
+			set ${reviewContent} = #{reviewContent}
+		where ${reviewNumber} = #{reviewNumber}
+	</update>
+	
+	<!-- 삭제 -->
+	<delete id="delete">
+		delete from ${review}
+		where ${reviewNumber} = #{reviewNumber}
+	</delete>
+</mapper>

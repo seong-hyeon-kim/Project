@@ -50,16 +50,45 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 
 		 
 		 <!-- HO -->
-		<property name="product_question" value="product_question"/>
-		<property name="productQuestionNumber" value="product_question_number"/>
-		<property name="userId" value="user_id"/>
-		<property name="productQuestionWhether" value="product_question_whether"/>
-		<property name="productQuestionType" value="product_question_type"/>
-		<property name="productQuestionContent" value="product_question_content"/>
-		<property name="productQuestionDateCreated" value="product_question_date_created"/>
-		<property name="productQuestionTitle" value="product_question_title"/>
+		<property name="product_question" value="product_question" />
+		<property name="productQuestionNumber" value="product_question_number" />
+		<property name="userId" value="user_id" />
+		<property name="productQuestionWhether" value="product_question_whether" />
+		<property name="productQuestionType" value="product_question_type" />
+		<property name="productQuestionContent" value="product_question_content" />
+		<property name="productQuestionDateCreated" value="product_question_date_created" />
+		<property name="productQuestionTitle" value="product_question_title" />
+		<property name="productNumber" value="product_number"/>
 		  
 		 <!-- HO -->
+		 <!-- review 테이블 -->
+		<property name="review" value="review"/>
+		<property name="reviewNumber" value="review_number"/>
+		<property name="userId" value="user_id"/>
+		<property name="productNumber" value="product_number"/>
+		<property name="reviewContent" value="review_content"/>
+		<property name="reviewGrade" value="review_grade"/>
+		<property name="userAge" value="user_age"/>
+		<property name="userGender" value="user_gender"/>
+		<property name="reviewDateCreated" value="review_date_created"/>
+		<property name="replyCnt" value="reply_cnt"/>
+		
+		<!-- reply 테이블 -->
+		<property name="reply" value="reply"/>
+		<property name="replyNumber" value="reply_number"/>
+		<property name="reviewNumber" value="review_number"/>
+		<property name="replyContent" value="reply_content"/>
+		<property name="userId" value="user_id"/>
+		<property name="replyDateCreated" value="reply_date_created"/>
+		
+		<!-- reReply 테이블 -->
+		<property name="re_reply" value="re_reply"/>
+		<property name="reReplyNumber" value="re_reply_number"/>
+		<property name="replyNumber" value="reply_number"/>
+		<property name="reviewNumber" value="review_number"/>
+		<property name="reReplyContent" value="re_reply_content"/>
+		<property name="userId" value="user_id"/>
+		<property name="reReplyDate" value="re_reply_date"/>
 		 
 		 
 		 <!-- 희 -->

@@ -10,11 +10,12 @@ public class QnaVO {
 	private String productQuestionContent;
 	private Date productQuestionDateCreated;
 	private String productQuestionTitle;
+	private int productNumber;
 	
 	public QnaVO() {}
 
 	public QnaVO(int productQuestionNumber, String userId, String productQuestionWhether, String productQuestionType,
-			String productQuestionContent, Date productQuestionDateCreated, String productQuestionTitle) {
+			String productQuestionContent, Date productQuestionDateCreated, String productQuestionTitle, int productNumber) {
 		super();
 		this.productQuestionNumber = productQuestionNumber;
 		this.userId = userId;
@@ -23,6 +24,7 @@ public class QnaVO {
 		this.productQuestionContent = productQuestionContent;
 		this.productQuestionDateCreated = productQuestionDateCreated;
 		this.productQuestionTitle = productQuestionTitle;
+		this.productNumber = productNumber;
 	}
 
 	public int getProductQuestionNumber() {
@@ -80,13 +82,21 @@ public class QnaVO {
 	public void setProductQuestionTitle(String productQuestionTitle) {
 		this.productQuestionTitle = productQuestionTitle;
 	}
+	
+	public int getProductNumber() {
+		return productNumber;
+	}
+	
+	public void setProductNumber(int productNumber) {
+		this.productNumber = productNumber;
+	}
 
 	@Override
 	public String toString() {
 		return "QnaVO [productQuestionNumber=" + productQuestionNumber + ", userId=" + userId
 				+ ", productQuestionWhether=" + productQuestionWhether + ", productQuestionType=" + productQuestionType
 				+ ", productQuestionContent=" + productQuestionContent + ", productQuestionDateCreated="
-				+ productQuestionDateCreated + ", productQuestionTitle=" + productQuestionTitle + "]";
+				+ productQuestionDateCreated + ", productQuestionTitle=" + productQuestionTitle + ", productNumber=" + productNumber + "]";
 	}
 	
 } // end QnaVO

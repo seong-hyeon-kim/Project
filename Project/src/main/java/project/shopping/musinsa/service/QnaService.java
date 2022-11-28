@@ -8,7 +8,7 @@ import project.shopping.musinsa.pageutil.PageCriteria;
 public interface QnaService {
 	int create(QnaVO vo);
 	
-	List<QnaVO> read(PageCriteria criteria);
+	List<QnaVO> read(PageCriteria criteria, int productNumber);
 	
 	QnaVO read(int productQuestionNumber);
 	
@@ -16,6 +16,6 @@ public interface QnaService {
 	
 	int delete(int productQuestionNumber);
 	
-	int getTotalCounts();
+	int getTotalCounts(int productNumber);
 
 } // end QnaService

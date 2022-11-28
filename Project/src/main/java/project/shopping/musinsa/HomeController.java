@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import project.shopping.musinsa.domain.ProductVO;
+import project.shopping.musinsa.domain.UserVO;
 import project.shopping.musinsa.pageutil.PageCriteria;
 import project.shopping.musinsa.pageutil.PageMaker;
 import project.shopping.musinsa.service.ProductService;
@@ -26,10 +27,11 @@ public class HomeController {
 	private ProductService productService;
 	
 	@RequestMapping(value = "/", method = RequestMethod.GET)
-	public String home(Locale locale, Model model, Integer page, Integer numsPerPage) {
+	public String home(Locale locale, Model model, Integer page, Integer numsPerPage, UserVO uvo) {
 		numsPerPage = 50;
 		logger.info("main() »£√‚");
 		logger.info("page = " + page + ", numsPerPage = " + numsPerPage);
+		logger.info("userVO : " + uvo.toString());
 		
 		PageCriteria criteria = new PageCriteria();
 		if(page != null) {
