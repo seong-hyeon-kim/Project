@@ -13,6 +13,7 @@ ul li {
 </style>
 <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="https://service.iamport.kr/js/iamport.payment-1.1.5.js"></script>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 </head>
@@ -101,82 +102,101 @@ ul li {
 	    		var paymentPrice = $('#paymentPrice').val();
 	    		var paymentAmount = $('#paymentAmount').val();
 	    		var paymentProductSize = $('#paymentProductSize').val();
+	    		var productName = $('#productName').val();
 	    		
-	    		var obj = {
-	    				'userId' : nonUserId,
-	    				'nonUserEmail' : nonUserEmail,
-	    				'nonUserPhone' : nonUserPhone,
-	    				'nonUserAddress' : nonUserAddress,
-	    				'productNumber' : productNumber,
-	    				'paymentPrice' : paymentPrice,
-	    				'paymentAmount' : paymentAmount,
-	    				'paymentProductSize' : paymentProductSize,
-	    		};
-	    		console.log(obj);
+	    		var IMP = window.IMP;
+	    		IMP.init('imp80165535');
 	    		
-	    		$.ajax({
-	    			type : 'POST',
-	    			url : '../nonUserPayment',
-	    			headers : {
-	    				  'content-type' : 'application/json',
-	                      'x-HTTP-Method-Override' : 'POST'
-	    			},
-	    			data : JSON.stringify(obj),
-	    			success : function(result, paymentResult) {
-	    				console.log('result : ' + result);
-	    				console.log('paymentResult : ' + paymentResult);
-	    				console.log(status);
-	    				if(paymentResult == 'success') {
-	    					alert('비회원 가입 후 구매 성공');
-	    					var url = '../nonUserPayment/' + nonUserId;
-	    					$.getJSON(
-	    							url,
-	    							function(data) {
-	    								console.log("data : " + data);
-	    								var list = '';
-	    								$(data).each(function() {
-	    									console.log(this);
-	    									
-	    									list += '<div class = "a">' 
-	    									+ '<h1>비회원 주문내역</h1>'
-	    									+ '임시 아이디 : ' + this.userId
-	    									+ '<table id="table">'
-	    									+ '<thead>'
-	    									+ '<tr>'
-	    									+ '<th></th>'
-	    									+ '<th>상품 정보</th>'
-	    									+ '<th>주문 정보</th>'
-	    									+ '<th>주문 수량</th>'
-	    									+ '<th>주문 옵션</th>'
-	    									+ '<th>주문 금액</th>'
-	    									+ '<th>주문 일자</th>'
-	    									+ '<th>주문 상황</th>'
-	    									+ '<th></th>'
-	    									+ '</tr>'
-	    									+ '</thead>'
-	    									+ '<tbody id="tbody">'
-	    									+ '<tr>'
-	    									+ '<td><img src="http://localhost:8080/musinsa/product/display?fileName=/' + this.productVO.productImg +'" width="125px" height="150px"></td>'
-	    									+ '<td>' + this.productVO.productName + '</td>'
-	    									+ '<td>' + this.paymentNumber + '</td>'
-	    									+ '<td>' + this.paymentAmount + '</td>'
-	    									+ '<td>' + this.paymentProductSize + '</td>'
-	    									+ '<td>' + this.paymentPrice + '</td>'
-	    									+ '<td>' + this.paymentDateCreated + '</td>'
-	    									+ '<td>' + this.paymentState + '</td>'
-	    									+ '<td id="refund"><button id="btn_refund">결제 취소</button></td>'
-	    									+ '</div>';
-	    									
-	    									
-	    								}) // end each()
-	    								$('#all').html(list);
-	    							} // end function(data)
-	    					) // end getJSON
-	    				}
-	    			}
-	    			
-	    			
-	    		}) // end ajax
+	    		IMP.request_pay({
+				    pg : 'html5_inicis',
+				    pay_method : 'card',
+				    merchant_uid: "payment_" + new Date().getTime(), // 상점에서 관리하는 주문 번호를 전달
+				    name : productName,
+				    amount : paymentPrice,
+				    buyer_name : nonUserId,
+				    
+				}, function(rsp) { // callback 로직
+					console.log(rsp);
+					if(rsp.success) {
+						var msg = '결제가 완료되었습니다.';
+						var obj = {
+			    				'userId' : nonUserId,
+			    				'nonUserEmail' : nonUserEmail,
+			    				'nonUserPhone' : nonUserPhone,
+			    				'nonUserAddress' : nonUserAddress,
+			    				'productNumber' : productNumber,
+			    				'paymentPrice' : paymentPrice,
+			    				'paymentAmount' : paymentAmount,
+			    				'paymentProductSize' : paymentProductSize,
+						};
+						$.ajax({
+			    			type : 'POST',
+			    			url : '../nonUserPayment',
+			    			headers : {
+			    				  'content-type' : 'application/json',
+			                      'x-HTTP-Method-Override' : 'POST'
+			    			},
+			    			data : JSON.stringify(obj),
+			    			success : function(result, paymentResult) {
+			    				console.log('result : ' + result);
+			    				console.log('paymentResult : ' + paymentResult);
+			    				console.log(status);
+			    				if(paymentResult == 'success') {
+			    					alert('비회원 가입 후 구매 성공');
+			    					var url = '../nonUserPayment/' + nonUserId;
+			    					$.getJSON(
+			    							url,
+			    							function(data) {
+			    								console.log("data : " + data);
+			    								var list = '';
+			    								$(data).each(function() {
+			    									console.log(this);
+			    									
+			    									list += '<div class = "a">' 
+			    									+ '<h1>비회원 주문내역</h1>'
+			    									+ '임시 아이디 : ' + this.userId
+			    									+ '<table id="table">'
+			    									+ '<thead>'
+			    									+ '<tr>'
+			    									+ '<th></th>'
+			    									+ '<th>상품 정보</th>'
+			    									+ '<th>주문 정보</th>'
+			    									+ '<th>주문 수량</th>'
+			    									+ '<th>주문 옵션</th>'
+			    									+ '<th>주문 금액</th>'
+			    									+ '<th>주문 일자</th>'
+			    									+ '<th>주문 상황</th>'
+			    									+ '<th></th>'
+			    									+ '</tr>'
+			    									+ '</thead>'
+			    									+ '<tbody id="tbody">'
+			    									+ '<tr>'
+			    									+ '<td><img src="http://localhost:8080/musinsa/product/display?fileName=/' + this.productVO.productImg +'" width="125px" height="150px"></td>'
+			    									+ '<td>' + this.productVO.productName + '</td>'
+			    									+ '<td>' + this.paymentNumber + '</td>'
+			    									+ '<td>' + this.paymentAmount + '</td>'
+			    									+ '<td>' + this.paymentProductSize + '</td>'
+			    									+ '<td>' + this.paymentPrice + '</td>'
+			    									+ '<td>' + this.paymentDateCreated + '</td>'
+			    									+ '<td>' + this.paymentState + '</td>'
+			    									+ '</div>';
+			    									
+			    									
+			    								}) // end each()
+			    								$('#all').html(list);
+			    							} // end function(data)
+			    					) // end getJSON
+			    				} // end if payment == success
+			    			} // end success : function
+			    			
+			    			
+			    		}) // end ajax
+						
+					} else {
+						var msg = '결제에 실패했습니다.';
+					} 
+					alert(msg);
+				});
 	    	}); // end nonUserPayment.click
 	    	
 	    function getNonUserPayment() {

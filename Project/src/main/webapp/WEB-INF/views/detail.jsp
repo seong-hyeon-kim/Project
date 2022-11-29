@@ -72,6 +72,7 @@ li {
 		<a href="http://localhost:8080/musinsa/payment"><input type="button" value="결제내역"></a>
 		<a href="http://localhost:8080/musinsa/cart"><input type="button" value="장바구니"></a>
 		<a href="http://localhost:8080/musinsa/like"><input type="button" value="좋아요"></a>
+		
 		<hr>
 	<form action="cart/register" method="POST">
 	
@@ -394,13 +395,9 @@ li {
    <!-- Review -->
    <h2 id="reviewAll">구매후기</h2>
    <div class="review" style="border: 1px solid black; width: 70%; margin-left: 15%;">
-   <div id="selectOption">
-      <select>
-         <option>최신순</option>
-         <option>댓글 순</option>
-         <option>높은 평점 순</option>
-         <option>낮은 평점 순</option>
-      </select><hr>
+   <div id="REVIEW">
+	<h1>REVIEW</h1>
+	<hr>
 	</div>
       <!-- Review 리스트 -->
       <div class="review-list-wrap" id="reviewlist">
@@ -410,12 +407,13 @@ li {
                   	<!-- 리뷰 틀 만들기 -->
                   	<input type="hidden" value="${rvo.productNumber }">
                   	<div id="reviewId"><p>아이디 : ${rvo.userId }</p></div>
+                  	<input type="hidden" id="rvoId" value="${rvo.userId }">
                   	<div id="userGender"><p>성별 : ${rvo.userGender }</p></div>
                   	<div id="userHeight"><p>키 : ${rvo.uvo.userHeight }cm</p></div>
                   	<div id="userWeight"><p>몸무게 : ${rvo.uvo.userWeight }kg</p></div>
                   	<div id="reviewGrade"><p>평점 : ${rvo.reviewGrade }</p></div>
                   	<div class="showReview">리뷰 : ${rvo.reviewContent }</div><br>
-                  	<button class="reviewDelete" style="margin-left: 70%;">삭제</button><br>
+                  	<button class="reviewDelete" value="${rvo.reviewNumber }" style="margin-left: 70%;">삭제</button><br>
                   	<p style="display: inline; width: 90%; height: 100%; border: none; background-color: white; font-size: 18px;">------------------댓글 목록▼</p><br>
                   	<div class="replies${rvo.reviewNumber }"></div> <!-- 댓글이 등록되는 div -->
                   	<c:if test="${not empty sessionScope.userId }">
@@ -426,12 +424,13 @@ li {
                   		</div>
                   	</c:if>
                   	<c:if test="${empty sessionScope.userId }">
-                  		* 댓글 작성은 로그인이 필요한 서비스 입니다. *<a href="/musinsa/user/login"><button>로그인</button></a>
+                  		* 댓글 작성은 로그인이 필요한 서비스 입니다. *&nbsp;<a href="/musinsa/user/login"><button>로그인</button></a>
                   	</c:if>
                   	<hr>
                   </c:forEach> 
                  <c:if test="${not empty sessionScope.userId }">
                  <div>
+                 <h3>리뷰 작성>ㅁ<</h3>
                   <p>평점 : 
                   	<select name="reviewGrade">
                   		<option value="5">5</option>
@@ -446,7 +445,7 @@ li {
                	</div>
                </c:if>
                <c:if test="${empty sessionScope.userId }">
-               		<p style="margin-left: 60%;">* 리뷰작성 및 댓글 작성은 로그인이 필요한 서비스 입니다. *<a href="/musinsa/user/login"><button>로그인</button></a></p>
+               		<p style="margin-left: 60%;">* 리뷰작성 및 댓글 작성은 로그인이 필요한 서비스 입니다. *&nbsp;<a href="/musinsa/user/login"><button>로그인</button></a></p>
                </c:if>
             </div>
       </div>
@@ -458,328 +457,395 @@ li {
    <input type="hidden" name="uvoAge" value="${sessionScope.uvo.userAge }">
    <input type="hidden" name="uvoGender" value="${sessionScope.uvo.userGender }">
    
-	<!-- 리뷰 작성 -->
-	<script type="text/javascript">
-	$(document).ready(function() {
-		$('#reviewBtn').click(function() {
-			// 이클립스 댓글 바로 보여주는거 활용해서 ajax 
-			var userId = $('input[name=sessionId]').val();
-			var productNumber = ${vo.productNumber}
-			var reviewContent = $('#reviewContent').val();
-			var reviewGrade = $('select[name=reviewGrade]').val();
-			var userAge = $('input[name=uvoAge]').val();
-			var userGender = $('input[name=uvoGender]').val();
-				console.log(userId);
-				console.log(productNumber);
-				console.log(reviewContent);
-				console.log(reviewGrade);
-				console.log(userAge);
-				console.log(userGender);
-			var obj = {
-					'userId' : userId,
-					'productNumber' : productNumber,
-					'reviewContent' : reviewContent,
-					'reviewGrade' : reviewGrade,
-					'userAge' : userAge,
-					'userGender' : userGender
-			};
-			console.log(obj);
-			
-			// $.ajax로 송수신
-			$.ajax({
-				type : 'POST',
-				url : 'reviews',
-				headers : {
-					'Content-Type' : 'application/json',
-					'X-HTTP-Method-Override' : 'POST'
-				},
-				data : JSON.stringify(obj),
-				success : function(result, status) {
-					console.log(result);
-					console.log(status);
-					if(result == 1) {
-						alert('정상적으로 등록 되었습니다.')
-						location.reload();
-					}
-				}
-			}); // end ajax()
-		}); // end reviewBtn.click()
-	}); // end document()
-	</script>
-	
+	   <!-- 리뷰 작성 -->
+   <script type="text/javascript">
+   $(document).ready(function() {
+      $('#reviewBtn').click(function() {
+         // 이클립스 댓글 바로 보여주는거 활용해서 ajax 
+         var userId = $('input[name=sessionId]').val();
+         var productNumber = ${vo.productNumber}
+         var reviewContent = $('#reviewContent').val();
+         var reviewGrade = $('select[name=reviewGrade]').val();
+         var userAge = $('input[name=uvoAge]').val();
+         var userGender = $('input[name=uvoGender]').val();
+            console.log(userId);
+            console.log(productNumber);
+            console.log(reviewContent);
+            console.log(reviewGrade);
+            console.log(userAge);
+            console.log(userGender);
+            
+         if(reviewContent == '') {
+        	 alert('작성 후 등록해주세요.');
+        	 return;
+         } else {
+	         var obj = {
+	               'userId' : userId,
+	               'productNumber' : productNumber,
+	               'reviewContent' : reviewContent,
+	               'reviewGrade' : reviewGrade,
+	               'userAge' : userAge,
+	               'userGender' : userGender
+	         };
+	         console.log(obj);
+	         
+	         // $.ajax로 송수신
+	         $.ajax({
+	            type : 'POST',
+	            url : 'reviews',
+	            headers : {
+	               'Content-Type' : 'application/json',
+	               'X-HTTP-Method-Override' : 'POST'
+	            },
+	            data : JSON.stringify(obj),
+	            success : function(result, status) {
+	               console.log(result);
+	               console.log(status);
+	               if(result == 1) {
+	                  alert('정상적으로 등록 되었습니다.')
+	                  location.reload();
+	               }
+	            }
+	         }); // end ajax()
+         }
+      }); // end reviewBtn.click()
+   }); // end document()
    
+   // 리뷰 삭제
+   $(document).on('click', '.review-content .reviewDelete', function(e) {
+	      var reviewNumber = this.value;
+	      console.log(reviewNumber);
+	      var sessionId = $('input[name=sessionId]').val();
+	      var userId = $(this).prevAll('#rvoId').val();
+	      console.log("로그인한 아이디 : " + sessionId + ", 글 작성자 : " + userId);
+	       if(sessionId != userId) {
+	         alert('본인이 작성한 글만 삭제 가능합니다.');
+	         return;
+	      } else {
+	         $.ajax({
+	            type : 'DELETE',
+	            url : 'reviews/' + reviewNumber,
+	            headers : {
+	               'Content-Type' : 'application/json',
+	               'X-HTTP-Method-Override' : 'DELETE'
+	            },
+	            data : JSON.stringify({
+	               'reviewNumber' : reviewNumber
+	            }) ,
+	            success : function(result) {
+	               console.log(result);
+	               if(result == 1) {
+	                  alert('리뷰 삭제 완료되었습니다.');
+	                  location.reload();
+	               }
+	            }
+	         }); // end ajax()
+	      } 
+	   }); // end document.on()
+   </script>
+      
    <!-- 댓글 -->
    <script type="text/javascript">
-   	$(document).ready(function() {
-   		var reviewListNumber = ${reviewListNumber};
-   		console.log(reviewListNumber);
-   		for(var i = 0; i < reviewListNumber.length; i++) {
-   			console.log(i);
-   			getAllReplies(reviewListNumber[i]);
-   		}
-   		console.log('test');
-   		
-   		var status = false;
-   		$('.replyAdd').click(function() {
-   			var replyContent = $(this).siblings('.replyText').val();
-   			var reviewNumber = $(this).siblings('input[class=reviewNo]').val();
-   			console.log(reviewNumber);
-   			console.log("댓글 내용 = " + replyContent + ", 리뷰번호 = " + reviewNumber);
-   			var objParams = {
-   					reviewNumber : $(this).siblings('input[class=reviewNo]').val(),
-   					replyContent : $(this).siblings('.replyText').val().replace('/n', '<br>'),
-   					userId : $('input[name=sessionId]').val()
-   			};
-   			console.log(objParams);
-   				
-   			$.ajax({
-   				type : "POST",
-   				url : "replies",
-   				headers : {
-   					"Content-Type" : "application/json",
-   					"X-HTTP-Method-Override" : "POST"
-   				},
-  				data : JSON.stringify(objParams),
-   				success : function(rvo) {
-   					if(rvo.code != "OK") {
-   						alert(rvo.message);
-   						return false;
-   					} else {
-   						alert("댓글 등록 성공");
-   						getAllReplies(reviewNumber);
-   						getReReplies(replyNumber, reReplyContent);
-   					}
-   				},
-   				error : function(request, status, error) {
-   					console.log("AJAX_ERROR");
-   				}
-   			}); // end ajax
-   			
-   		}); // end replyAdd.click()
-   				
-   		function getAllReplies(index) {
-   			var reviewNumber = index;
-   			console.log('콘솔 위치 확인');
-   			console.log(reviewNumber);
-   				var url = 'replies/all/' + reviewNumber;
-   					
-   	 			$.getJSON(
-   	    				url,
-   	    				function(data) {
-   	    					console.log(data);
-   	    					var userSession = $('input[name=sessionId]').val();
-   	    					var list = '';
-   	    					reviewNumber;
-   	    						
-   	    					$(data).each(function() {
-   	    						console.log(this);
-   	    						var replyDateCreated = new Date(this.replyDateCreated);
-   	    						var disabled = '';
-   	    						var readonly = '';
-   	    						if(userSession == this.userId) {
-   	    							disabled = '';
-   	    							readonly = '';
-   	    						} else {
-   	    							disabled = 'disabled';
-   	    							readonly = 'readonly';
-   	    						}
-   	    							
-   	    						list += '<div class="reply_item" style="width: 100%; height: 100%;">'
-   	    							+ '<pre>'
-   	    							+ '<input type="hidden" id="reviewNumber" value="' + this.reviewNumber + '" >'
-   	    							+ '<input type="hidden" id="replyNumber" value="' + this.replyNumber + '" />'
-   	    							+ '<input type="hidden" id="userSession" value="' + userSession + '" />'
-   	   								+ '<input type="hidden" id="userId" value="' + this.userId + '" />'
-   	   								+ this.userId
-   	   								+ '&nbsp;&nbsp;'
-   	   								+ '<input type="text" id="replyContent" value="' + this.replyContent + '" ' + readonly + ' />'
-   	   								+ '&nbsp;&nbsp;'
-   	   								+ replyDateCreated
-   	   								+ '&nbsp;&nbsp;'
-   	   								+ '<button class="btn_update" ' + disabled + '>수정</button>'
-       								+ '&nbsp;&nbsp;'
-      								+ '<button class="btn_delete" ' + disabled + '>삭제</button>'
-      								+ '<br>'
-      								+ '<br>'
-      								+ '<div id="re-reply"></div>'
-      								+ '<br>'
-      								+ '&nbsp;&nbsp;'
-      								+ '&nbsp;&nbsp;'
-      								+ '&nbsp;&nbsp;'
-      								+ '대댓글 작성 : <input type="text" id="re-replyContent">'
-      								+ '&nbsp;&nbsp;'
-      								+ '<button class="btn_re-reply">대댓글 작성</button><br>'
-      								+ '<br>'
-      								+ '&nbsp;&nbsp;'
-      								+ '&nbsp;&nbsp;'
-      								+ '-------------------------------------------------'
-      								+ '&nbsp;&nbsp;'
-      								+ '&nbsp;&nbsp;'
-  	    							+ '</pre>'
-   	    							+ '</div>';
-   	    					}); // end data.each()
-   	    					$('.replies' + reviewNumber).html(list);
-   	    		
-   	    				} // end function()
-   	   				); // end getJSON()
-   				
-   			} // end getAllReplies()
-   			
-   			
-   			// 대댓글 등록
-   			$('.review-content').on('click', '.reply_item .btn_re-reply', function() {
-   				var replyNumber = $(this).prevAll('#replyNumber').val();
-   				var reReplyContent = $(this).prevAll('#re-replyContent').val();
-   				var sessionId = $('input[name=sessionId]').val();
-   				var reviewNumber = $(this).prevAll('#reviewNumber').val();
-   				console.log("선택한 댓글의 게시글 번호 : " + replyNumber + ", 선택한 댓글 번호 : " + replyNumber + ", 대댓글 내용 : " + reReplyContent + ", 작성자 : " + sessionId);
-   				if(sessionId == '') {
-   					alert('로그인이 필요한 서비스입니다.');
-   					location.href = "/musinsa/user/login";
-   				} else if(reReplyContent == '') {
-   					alert('공백은 등록 할 수 없습니다.')
-   					return;
-   				} else {
-   					var obj = {
-   						replyNumber : $(this).prevAll('#replyNumber').val(),
-   						reReplyContent : $(this).prevAll('#re-replyContent').val(),
-   						userId : $('input[name=sessionId]').val(),
-   					}
-   					console.log(obj);
-   					
-   					$.ajax({
-   						type : 'POST',
-   						url : 're-replies',
-   						headers : {
-   							'Content-Type' : 'application/json',
-   							'X-HTTP-Method-Override' : 'POST'
-   						},
-   						data : JSON.stringify(obj),
-   						success : function(result, status) {
-   							console.log(result);
-   							console.log(status);
-   							if(result == 1) {
-   								alert('대댓글이 정상적으로 등록 되었습니다.')
-   								getReReplies(replyNumber, reReplyContent);
-   								console.log('요기');
-   								console.log(replyNumber);
-   								console.log(reReplyContent);
-   							}
-   						}
-   						
-   					}); // end ajax()
-   				}
-   				
-   			}); // end document.on()
-   			
-   			
-   			function getReReplies(replyNumber, reReplyContent) {
-   				console.log("요시!");
-   				console.log(replyNumber);
-   				$('.review-content').on('click', '.reply_item .btn_re-reply', function(){
-   					var reReplyContent = $(this).prevAll('#re-replyContent').val();
-   					console.log(reReplyContent);
-   				})
-   				// var reReplyContent = $('.reply_item .btn_re-reply').siblings('#re-replyContent').val();
-   				console.log(reReplyContent);
-   				var url = 're-replies/all/' + replyNumber;
-   				
-   				$.getJSON(
-   					url,
-   					function(data) {
-   						console.log('test 대댓글 작성');
-   						var userSession = $('input[name=sessionId]').val();
-   						var list = '';
-   						replyNumber;
-   						reReplyContent;
-   						console.log("여기다여기")
-   						console.log("댓글 번호 : " + replyNumber + ", 대댓글 내용 : " + reReplyContent + ", 로그인한 아이디 : " + userSession)
-   						
-   						$(data).each(function() {
-   							console.log(this);
-   							var disabled = '';
-   							var readonly = '';
-   							if(userSession == this.userId) {
-   								disabled = '';
-   								readonly = '';
-   							} else {
-   								disabled = 'disabled';
-   								readonly = 'readonly';
-   							}
-   							
-   							list += '<div class="re_reply_item">'
-   								+ '<pre>'
-   								+ '<input type="hidden" id="replyNumber" value="' + this.replyNumber + '" />'
-   								+ '&nbsp;&nbsp;'
-   								+ '&nbsp;&nbsp;'
-   								+ 'ㄴ'
-   								+ '&nbsp;&nbsp;'
-   								+ this.userId
-   								+ '&nbsp;&nbsp;'
-   								+ '<input type="text" id="reReplyContent" value="' + reReplyContent + '" />'
-   								+ '&nbsp;&nbsp;'
-   								+ '&nbsp;&nbsp;'
-   								+ '<button class="btn_reDelete" ' + disabled + '>삭제</button>'
-   								+ '</pre>'
-   								+ '</div>'
-   							
-   						}); // end data.each()
-   						$('.review-content .reply_item #re-reply').append(list);
-   					}
-   				);
-   			} // end getReReplies();
-   			
-   		
-   			$(document).on('click', '.reply_item .btn_update', function() {
-   				var replyNumber = $(this).prevAll('#replyNumber').val();
-   				var replyContent = $(this).prevAll('#replyContent').val();
-   				var reviewNumber = $(this).prevAll('#reviewNumber').val();
-   				console.log("선택한 댓글 번호 : " + replyNumber + ", 댓글 내용 : " + replyContent + ", 리뷰글번호 : " + reviewNumber);
-   				
-   				$.ajax({
-   					type : 'PUT',
-   					url : 'replies/' + replyNumber,
-   					headers : {
-   						'Content-Type' : 'application/json',
-   						'X-HTTP-Method-Override' : 'PUT'
-   					},
-   					data : JSON.stringify({'replyContent' : replyContent}),
-   					success : function(result) {
-   						console.log(result);
-   						if(result == 1) {
-   							alert('댓글이 수정되었습니다.');
-   							getAllReplies(reviewNumber);
-   						}
-   					}
-   				}); // end ajax()
-   			}); // end document.on()
-   			
-   			$(document).on('click', '.reply_item .btn_delete', function() {
-   				var replyNumber = $(this).prevAll("#replyNumber").val();
-   				var reviewNumber = $(this).prevAll('#reviewNumber').val();
-   				console.log("선택된 댓글 번호 : " + replyNumber);
-   				
-   				$.ajax({
-   					type : 'DELETE',
-   					url : 'replies/' + replyNumber,
-   					headers : {
-   						'Content-Type' : 'application/json',
-   						'X-HTTP-Method-Override' : 'DELETE'
-   					},
-   					data : JSON.stringify({
-   						'replyNumber' : replyNumber
-   					}),
-   					success : function(result) {
-   						console.log(result);
-   						if(result == 1) {
-   							alert('댓글 삭제 완료되었습니다.');
-   							getAllReplies(reviewNumber);
-   						}
-   					}
-   				}); // end ajax()
-   			}); // end document.on()
-   			
-  	}); // end document()
+      $(document).ready(function() {
+         var reviewListNumber = ${reviewListNumber};
+         console.log(reviewListNumber);
+         for(var i = 0; i < reviewListNumber.length; i++) {
+            console.log(i);
+            getAllReplies(reviewListNumber[i]);
+         }
+         console.log('test');
+         
+         var status = false;
+         $('.replyAdd').click(function() {
+            var replyContent = $(this).siblings('.replyText').val();
+            var reviewNumber = $(this).siblings('input[class=reviewNo]').val();
+            console.log(reviewNumber);
+            console.log("댓글 내용 = " + replyContent + ", 리뷰번호 = " + reviewNumber);
+            
+            if(replyContent == '') {
+               alert('작성 후 등록해주세요');
+               return;
+            } else {
+               var objParams = {
+                     reviewNumber : $(this).siblings('input[class=reviewNo]').val(),
+                     replyContent : $(this).siblings('.replyText').val().replace('/n', '<br>'),
+                     userId : $('input[name=sessionId]').val()
+               };
+               console.log(objParams);
+                  
+               $.ajax({
+                  type : "POST",
+                  url : "replies",
+                  headers : {
+                     "Content-Type" : "application/json",
+                     "X-HTTP-Method-Override" : "POST"
+                  },
+                 data : JSON.stringify(objParams),
+                  success : function(rvo) {
+                     if(rvo.code != "OK") {
+                        alert(rvo.message);
+                        return false;
+                     } else {
+                        alert("댓글 등록 성공");
+                        getAllReplies(reviewNumber);
+                     }
+                  },
+                  error : function(request, status, error) {
+                     console.log("AJAX_ERROR");
+                  }
+               }); // end ajax
+            }
+            
+         }); // end replyAdd.click()
+               
+         function getAllReplies(index) {
+            var reviewNumber = index;
+            console.log('콘솔 위치 확인');
+            console.log(reviewNumber);
+               var url = 'replies/all/' + reviewNumber;
+                  
+                $.getJSON(
+                      url,
+                      function(data) {
+                         console.log(data);
+                         var userSession = $('input[name=sessionId]').val();
+                         var list = '';
+                         reviewNumber;
+                            
+                         $(data).each(function() {
+                            console.log(this);
+                            var replyDateCreated = new Date(this.replyDateCreated);
+                            var disabled = '';
+                            var readonly = '';
+                            if(userSession == this.userId) {
+                               disabled = '';
+                               readonly = '';
+                            } else {
+                               disabled = 'disabled';
+                               readonly = 'readonly';
+                            }
+                               
+                            list += '<div class="reply_item" style="width: 100%; height: 100%;">'
+                               + '<pre>'
+                               + '<input type="hidden" id="reviewNumber" value="' + this.reviewNumber + '" >'
+                               + '<input type="hidden" id="replyNumber" value="' + this.replyNumber + '" />'
+                               + '<input type="hidden" id="userSession" value="' + userSession + '" />'
+                               + '<input type="hidden" id="userId" value="' + this.userId + '" />'
+                               + this.userId
+                               + '&nbsp;&nbsp;'
+                               + '<input type="text" id="replyContent" value="' + this.replyContent + '" ' + readonly + ' />'
+                               + '&nbsp;&nbsp;'
+                               + replyDateCreated
+                               + '&nbsp;&nbsp;'
+                               + '<button class="btn_update" ' + disabled + '>수정</button>'
+                               + '&nbsp;&nbsp;'
+                               + '<button class="btn_delete" ' + disabled + '>삭제</button>'
+                               + '<br>'
+                               + '<br>'
+                               + '<div class="re-reply"></div>'
+                               + '&nbsp;&nbsp;'
+                               + '&nbsp;&nbsp;'
+                               + '&nbsp;&nbsp;'
+                               + '<br>'
+                               + '<button class="btn_reReplyShow">답글 확인</button>'
+                               + '</pre>'
+                               + '</div>'; 
+                         }); // end data.each()
+                         $('.replies' + reviewNumber).html(list);
+                
+                       } // end function()
+                     ); // end getJSON()
+               
+            } // end getAllReplies()
+            
+            // 대댓글 등록
+            $('.review-content').on('click', '.reply_item .btn_re-reply', function(a) {
+               console.log('a test');
+               var replyNumber = this.value;
+               console.log(replyNumber);
+               var reReplyContent = $(this).prevAll('#re-replyContent').val();
+               var sessionId = $('input[name=sessionId]').val();
+               var reviewNumber = $(this).prevAll('#reviewNumber').val();
+               console.log("선택한 댓글의 게시글 번호 : " + replyNumber + ", 선택한 댓글 번호 : " + replyNumber + ", 대댓글 내용 : " + reReplyContent + ", 작성자 : " + sessionId);
+               if(sessionId == '') {
+                  alert('로그인이 필요한 서비스입니다.');
+                  location.href = "/musinsa/user/login";
+               } else if(reReplyContent == '') {
+                  alert('공백은 등록 할 수 없습니다.')
+                  return;
+               } else {
+                  var obj = {
+                     replyNumber : this.value,
+                     reReplyContent : $(this).prevAll('#re-replyContent').val(),
+                     userId : $('input[name=sessionId]').val(),
+                  }
+                  console.log(obj);
+                  
+                  $.ajax({
+                     type : 'POST',
+                     url : 're-replies',
+                     headers : {
+                        'Content-Type' : 'application/json',
+                        'X-HTTP-Method-Override' : 'POST'
+                     },
+                     data : JSON.stringify(obj),
+                     success : function(result, status) {
+                        console.log(result);
+                        console.log(status);
+                        if(result == 1) {
+                           alert('대댓글이 정상적으로 등록 되었습니다.')
+                           console.log('요기');
+                        }
+                     }
+                     
+                  }); // end ajax()
+               }
+               
+            }); // end review-content.on()
+            
+         // 대댓글 불러오기
+           $(document).on('click' , '.reply_item .btn_reReplyShow', function(e){
+               var replyNumber = $(this).prevAll('#replyNumber').val();
+               var userId = $(this).prevAll('#userId').val();
+               var sessionId = $('input[name=sessionId]').val();
+               
+               var url = 're-replies/all/' + replyNumber;
+               var target = $(this);
+               console.log('test43123');
+               console.log($(this).prevAll('#replyNumber').val());
+               
+               $.getJSON(
+                  url,
+                  function(data) {
+                     var reReplyBtnCreate = '';
+                     var text = '';
+                   console.log(data);
+                   reReplyBtnCreate += '대댓글 작성 : <input type="text" id="re-replyContent">'
+                    + '&nbsp;&nbsp;'
+                    + '&nbsp;&nbsp;'
+                     + '<button class="btn_re-reply" value="' + replyNumber + '" style="background-color: black; color: white;">대댓글 작성</button>'
+                     + '&nbsp;&nbsp;'
+                     + '&nbsp;&nbsp;'
+                     + '&nbsp;&nbsp;'
+                     + '<br>'
+                     + '&nbsp;&nbsp;'
+                     + '&nbsp;&nbsp;';
+                     
+                   $(data).each(function(index) {
+                      console.log(this);
+                      console.log(index);
+                      if(sessionId == data[index].userId) {
+                         disabled = '';
+                         readonly = '';
+                      } else {
+                         disabled = 'disabled';
+                         readonly = 'readonly';
+                      }
+                         
+                  text += '<div id="reText">' 
+                        + '&nbsp;&nbsp;&nbsp;&nbsp;ㄴ' 
+                        + '&nbsp;&nbsp;' 
+                        + data[index].userId 
+                        + ' : ' 
+                        + '<input type="text" value="' + data[index].reReplyContent + '" ' + readonly + '>'
+                        + '&nbsp;&nbsp;'
+                        + '&nbsp;&nbsp;'
+                        + '<button class="deleteRe" value="' + this.reReplyNumber + '" ' + disabled + '>삭제</button>'
+                        + '<br>'
+                        + '<br>'
+                        + '</div>';
+                      
+                   }); // end data.each()
+                   target.siblings('.re-reply').html('<div>' + reReplyBtnCreate + '</div>');
+                   if(data.length != 0) {
+                      target.siblings('.re-reply').append(text);
+                   }
+                } // end function()
+             ); // end getJSON()
+         
+            }) // end document.on()
+            
+            // 특정 div 새로고침
+            function reloadDiv() {
+               $('#reText').load(location.href+'#reText');
+            }
+            
+            // 대댓글 삭제
+            $('.review-content').on('click', '.reply_item .re-reply #reText .deleteRe', function(e) {
+               var reReplyNumber = this.value;
+               console.log(reReplyNumber);
+               
+               $.ajax({
+                  type : 'DELETE',
+                  url : 're-replies/' + reReplyNumber,
+                  headers : {
+                     'Content-Type' : 'application/json',
+                     'X-HTTP-Method-Override' : 'DELETE'
+                  },
+                  data : JSON.stringify({
+                     'reReplyNumber' : reReplyNumber
+                  }),
+                  success : function(result) {
+                     if(result == 1) {
+                        alert('대댓글이 삭제 되었습니다.');
+                        reloadDiv();
+                     }
+                  }
+               }); // end ajax()
+            });
+         
+            // 댓글 수정
+            $(document).on('click', '.reply_item .btn_update', function() {
+               var replyNumber = $(this).prevAll('#replyNumber').val();
+               var replyContent = $(this).prevAll('#replyContent').val();
+               var reviewNumber = $(this).prevAll('#reviewNumber').val();
+               console.log("선택한 댓글 번호 : " + replyNumber + ", 댓글 내용 : " + replyContent + ", 리뷰글번호 : " + reviewNumber);
+               
+               $.ajax({
+                  type : 'PUT',
+                  url : 'replies/' + replyNumber,
+                  headers : {
+                     'Content-Type' : 'application/json',
+                     'X-HTTP-Method-Override' : 'PUT'
+                  },
+                  data : JSON.stringify({'replyContent' : replyContent}),
+                  success : function(result) {
+                     console.log(result);
+                     if(result == 1) {
+                        alert('댓글이 수정되었습니다.');
+                        getAllReplies(reviewNumber);
+                     }
+                  }
+               }); // end ajax()
+            }); // end document.on()
+            
+            // 댓글 삭제
+            $(document).on('click', '.reply_item .btn_delete', function() {
+               var replyNumber = $(this).prevAll("#replyNumber").val();
+               var reviewNumber = $(this).prevAll('#reviewNumber').val();
+               console.log("선택된 댓글 번호 : " + replyNumber);
+               
+               $.ajax({
+                  type : 'DELETE',
+                  url : 'replies/' + replyNumber,
+                  headers : {
+                     'Content-Type' : 'application/json',
+                     'X-HTTP-Method-Override' : 'DELETE'
+                  },
+                  data : JSON.stringify({
+                     'replyNumber' : replyNumber
+                  }),
+                  success : function(result) {
+                     console.log(result);
+                     if(result == 1) {
+                        alert('댓글 삭제 완료되었습니다.');
+                        getAllReplies(reviewNumber);
+                     }
+                  }
+               }); // end ajax()
+            }); // end document.on()
+            
+     }); // end document()
    </script>
 
    
@@ -817,50 +883,49 @@ li {
       $('.deleteBtn').click(function() {
             var userId = $('input[name=sessionId]').val();
             if(userId == '') {
-            	alert('로그인 후 이용 가능한 서비스 입니다.');
-            	location.href = "/musinsa/user/login";
+               alert('로그인 후 이용 가능한 서비스 입니다.');
+               location.href = "/musinsa/user/login";
             } else if(confirm('정말 삭제 하시겠습니까?')) {
-        		var str = '';
-            	var deleteBtn = $(this);
+              var str = '';
+               var deleteBtn = $(this);
          
-           	 	var tr = deleteBtn.parent().parent();
-            	var td = tr.children();
+                  var tr = deleteBtn.parent().parent();
+               var td = tr.children();
          
-            	console.log("row : " + tr.text());
+               console.log("row : " + tr.text());
          
-            	var no = td.eq(0).text();
-            	console.log(no);
+               var no = td.eq(0).text();
+               console.log(no);
             
-            	var no1 = td.eq(4).text();
-            	console.log(no1);
-            	
-            	if(userId != no1) {
-            		alert('본인이 작성한 글만 삭제가 가능합니다.')
-            		return;
-            	}
-            	
-            	$.ajax({
-				type : 'DELETE',
-               	url : '/musinsa/qa/' + no,
-              	headers : {
-                  	'Content-Type' : 'application/json',
-                  	'X-HTTP-Method-Override' : 'DELETE'
-               	},
-               	data : JSON.stringify({
-                  	'productQuestionNumber' : no
-               	}),
-               	success : function(result) {
-                  	console.log(result);
-                  	alert('정상적으로 삭제 되었습니다.')
-                  	location.reload();
-               	}
+               var no1 = td.eq(4).text();
+               console.log(no1);
                
-            	}); // end ajax()
+               if(userId != no1) {
+                  alert('본인이 작성한 글만 삭제가 가능합니다.')
+                  return;
+               }
+               
+               $.ajax({
+            type : 'DELETE',
+                  url : '/musinsa/qa/' + no,
+                 headers : {
+                     'Content-Type' : 'application/json',
+                     'X-HTTP-Method-Override' : 'DELETE'
+                  },
+                  data : JSON.stringify({
+                     'productQuestionNumber' : no
+                  }),
+                  success : function(result) {
+                     console.log(result);
+                     alert('정상적으로 삭제 되었습니다.')
+                     location.reload();
+                  }
+               
+               }); // end ajax()
             } 
          
       }); // end deleteBtn.click()
    </script>
-   
 
 	
 </body>

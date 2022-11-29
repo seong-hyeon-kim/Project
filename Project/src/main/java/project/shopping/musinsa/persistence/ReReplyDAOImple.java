@@ -29,7 +29,7 @@ public class ReReplyDAOImple implements ReReplyDAO {
 	@Override
 	public List<ReReplyVO> select(int replyNumber) {
 		logger.info("*********select() »£√‚ : replyNumber = " + replyNumber);
-		return sqlSession.selectList(NAMESPACE + ".selectTest", replyNumber);
+		return sqlSession.selectList(NAMESPACE + ".select_all_by_reply_number", replyNumber);
 	} // end select()
 
 	@Override

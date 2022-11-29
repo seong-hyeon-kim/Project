@@ -10,31 +10,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		values(#{replyNumber}, #{reviewNumber}, #{reReplyContent}, #{userId})
 	</insert>
 	
-	<resultMap type="ReplyVO" id="replyMap">
-		<id column="REPLY_NUMBER" property="replyNumber"/>
-		<result column="REVIEW_NUMBER" property="reviewNumber"/>
-		<result column="REPLY_CONTENT" property="replyContent"/>
-		<result column="USER_ID" property="userId"/>
-		<result column="REPLY_DATE_CREATED" property="replyDateCreated"/>
-		
-		<association javaType="ReReplyVO" property="reReplyVO">
-			<id column="RE_REPLY_NUMBER" property="reReplyNumber"/>
-			<result column="REPLY_NUMBER" property="replyNumber"/>
-			<result column="REVIEW_NUMBER" property="reviewNumber"/>
-			<result column="RE_REPLY_CONTENT" property="reReplyContent"/>
-			<result column="USER_ID" property="userId"/>
-			<result column="RE_REPLY_DATE" property="reReplyDate"/>
-		</association>
-	</resultMap>
-	
-	<select id="select_all_by_reply_number" parameterType="java.util.ArrayList" resultMap="replyMap">
-		select R.RE_REPLY_NUMBER, S.REPLY_NUMBER, R.RE_REPLY_CONTENT, R.USER_ID, R.RE_REPLY_DATE
-			from RE_REPLY R, REPLY S
-			WHERE R.REPLY_NUMBER = S.REPLY_NUMBER
-		and R.REPLY_NUMBER = #{replyNumber} order by R.RE_REPLY_NUMBER ASC
-	</select>
-	
-	<select id="selectTest" resultType="ReReplyVO">
+	<select id="select_all_by_reply_number" resultType="ReReplyVO">
 		select * from ${re_reply}
 		where ${replyNumber} = #{replyNumber}
 		order by ${reReplyNumber} asc

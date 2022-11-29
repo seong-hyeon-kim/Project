@@ -162,10 +162,15 @@ ul {
 				<a href="http://localhost:8080/musinsa/payment"><input type="button" value="결제내역"></a>
 				<a href="http://localhost:8080/musinsa/cart"><input type="button" value="장바구니"></a>
 				<a href="http://localhost:8080/musinsa/like"><input type="button" value="좋아요"></a>
+				<input type="button" id="show" value="비회원 결제내역"><br>
 			</div>
 			
 			
-		<div class="clearfix">구간1</div>			
+		<div class="search_by_name">
+			<input type="text" id="nameSearch" placeholder="검색어">
+		</div>
+				
+					
 		</div>
 		
 		<div class="navi_bar_area">
@@ -205,6 +210,12 @@ ul {
 		
 		<!-- test -->
 		<hr>
+		<div class="search_by_category">
+			<select>
+				<option>상의</option>
+				<option>하의</option>
+			</select>
+		</div>	
 		<c:forEach var="vo" items="${list}">
 	
 	<div class="productList" style="margin: auto;">
@@ -253,6 +264,29 @@ ul {
 			}		
 			);
 		});
+		
+		$('#show').click(function() {
+			// 창 크기
+			var width = 700;
+			var height = 550;
+			
+			// pop 화면 기준 가운데 정렬
+			var left = (window.screen.width / 2) - (width/2); // 에러는 아니지만 인식문제로 에러표시
+			var top = (window.screen.height / 4);
+			
+			// 윈도우 속성 지정
+			var windowStatus = 'width='+width+', height='+height+', left='+left+', top='+top+', scrollbars=yes, status=yes, resizable=yes, titlebar=yes';
+			
+			// 연결을 원하는 url
+			const url = "user/nonUserPayment";
+			
+			// 등록된 url 및  window 속성 기준으로 팝업창을 연다.
+			
+			window.open(url, "hello", windowStatus);
+		})
+			
+			
+		
 	</script>
 	
 	
